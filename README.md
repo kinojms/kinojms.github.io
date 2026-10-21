@@ -1,6 +1,8 @@
 # Justin Sacdalan — portfolio
 
-A personal portfolio based on [Once UI Magic Portfolio](https://once-ui.com/products/magic-portfolio), customized with ten projects from [@kinojms](https://github.com/kinojms). Built with Next.js and Once UI. The source template is licensed [CC BY-NC 4.0](LICENSE); attribution remains in the footer. Review that noncommercial license before using the site for commercial purposes or buying the appropriate license.
+A personal portfolio using [Once UI Magic Portfolio](https://once-ui.com/products/magic-portfolio) as a base, customized with projects from my Github repositories. Built with Next.js and Once UI. The source template is licensed [CC BY-NC 4.0](LICENSE) (don't worry, attribution is in the footer). Note for viewers: Review that noncommercial license before using the site for commercial purposes or buying the appropriate license.
+
+=== AI-generated ahh description after this part ===
 
 **Live:** https://kinojms.github.io/
 
@@ -21,8 +23,5 @@ Visit http://localhost:3000. `npm run build` creates a static export in `out/`. 
 - Cover images: `public/images/projects/*.png`
 - Editable HTML/CSS cover studio: `thumbnails/index.html?project=pocket-gains` (serve the repository with `python -m http.server 8123`; change the `project` query parameter to a project slug)
 
-Gastos.io uses a supplied promotional screenshot; the other nine covers were rendered from the cover studio at 1600×900. The nine generated covers are **conceptual cover art**, not screenshots of the actual applications. You can replace a PNG with a real product screenshot later without changing its MDX page. The studio's UI-like artwork is illustrative and should not be presented as a verified application screen.
-
 The site has system-aware light/dark mode and a persistent header toggle. Only GitHub and an email address found in the public repos are included; add confirmed LinkedIn, résumé, work profiles, experience, and a custom domain in the content file when available. The About page intentionally makes no unverified employment or education claims.
 
-The metadata origin defaults to `https://kinojms.github.io`. Set `NEXT_PUBLIC_SITE_URL` to the new public origin if you move the site to another domain.
