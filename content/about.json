@@ -19,13 +19,13 @@
       "label": "ABOUT MY PROJECTS",
       "heading": "Well of Ideas.",
       "tags": [],
-      "body": "Ever since I was a child, I was drawn to the space between technology and digital creativity. A web application, an interface, a video, or an unfamiliar idea: I enjoy turning the initial concept into something people can use or enjoy.\n\nMy background is in web and software development, with hands-on work across React, Next.js, TypeScript, JavaScript, Python and Kotlin. I care as much about how an interface feels as how it works behind the scenes.\n\nThat curiosity has led to projects like [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a game-inspired workout companion. Each project is another chance to learn something new and refine the details."
+      "body": "I’ve been drawn to the space between technology and digital creativity for as long as I can remember. Whether it’s a web app, an interface, a video, or some random idea that just popped into my head, I like taking that first rough concept and turning it into something people can actually use (or at least have fun with).\n\nMost of my work lives on the web, where I build with React, Next.js and TypeScript, though I’ve also picked up JavaScript, Python and Kotlin along the way. I care just as much about how an interface feels as how it works behind the scenes, which is usually where the nitpicking starts.\n\nSome of my favorites so far are [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a workout tracker that turns your progress into a game. Both started as one of those many app ideas, and both taught me something new before they were done."
     },
     {
       "label": "MORE THAN CODE",
       "heading": "Building for people.",
       "tags": [],
-      "body": "I’m part of **The LaSallian’s Web team**, contributing to website development and the digital publishing work of DLSU’s student publication. Working alongside an editorial team has given me a greater appreciation for clarity, accessibility and the people behind what appears on screen.\n\nBeyond code, I explore graphic design, video editing and short-form content. I manage social media content independently; one TikTok channel has accumulated approximately 1.9 million views and 11,100 likes. Seeing an idea connect with an audience is just as rewarding as seeing software come together.\n\nI’ve also been involved with the La Salle Computer Society and the DLSU Data Science Society, where collaboration, events and shared curiosity have stretched me beyond the technical side of my degree."
+      "body": "I’m part of **The LaSallian’s Web team**, where I help build and maintain the website of DLSU’s student publication. Working alongside writers and editors has given me a new appreciation for clear, accessible design and the people behind everything that ends up on screen.\n\nOutside of code, I also do graphic design, video editing and short-form content. I handle my social media on my own, and one of my TikTok channels has picked up around **1.9 million views and 11,100 likes** (still kinda surreal to me). Watching an idea click with an audience is just as fulfilling as finally seeing a project come together.\n\nI’ve also been part of the **La Salle Computer Society** and the **DLSU Data Science Society**, which pulled me out of my comfort zone and into events, collaborations and a lot of people who are just as curious as I am."
     },
     {
       "label": "HOW I WORK",
@@ -37,12 +37,12 @@
         "Creative media",
         "Data & research"
       ],
-      "body": "I’m analytical and resourceful. Rather than accepting the first answer, I like to understand why something works, question assumptions, and try another approach when the result can be better.\n\nWhen I’m away from a project, you’ll likely find me exploring a new tool, playing video or tabletop games, experimenting with design, or sketching out another app idea."
+      "body": "If there’s one thing that describes how I work, it’s that I like figuring things out. I don’t really trust the first answer I get, so I’d rather understand *why* something works, question the assumptions behind it, and try another approach if the result could be better.\n\nI don’t think being good at something means knowing every answer. For me, it means knowing how to ask the right questions, finding reliable information, and making the most of whatever tools and “resources” I have on hand. Honestly, that’s pretty much how I’ve learned most of what I know."
     }
   ],
   "contact": {
     "label": "WHAT’S NEXT",
     "heading": "Let’s make something happen.",
-    "body": "I’m open to interesting projects, creative collaborations and opportunities to learn from different perspectives. Have something in mind?"
+    "body": "I’m always open to interesting projects, creative collaborations, or just learning something new from a different perspective. Have something in mind? Let’s talk."
   }
 }
