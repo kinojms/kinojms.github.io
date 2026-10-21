@@ -12,6 +12,9 @@ html.theme-switching * {
 
 ::view-transition-old(root) {
   z-index: 1;
+  /* WAAPI's fill defaults to auto; after its last frame it can briefly
+     expose the entire old snapshot before the view transition is removed. */
+  clip-path: circle(0px at 50% 50%);
 }
 
 ::view-transition-new(root) {
