@@ -40,6 +40,9 @@ export const ThemeToggle: React.FC = () => {
     );
 
     transitioning.current = true;
+    // Once UI animates inherited colors for up to two seconds. Those changes
+    // continue behind the snapshot and flash when it disappears at 950 ms.
+    document.documentElement.classList.add("theme-switching");
     const transition = document.startViewTransition(() => setTheme(next));
     transition.ready
       .then(() => {
@@ -59,7 +62,10 @@ export const ThemeToggle: React.FC = () => {
       })
       .catch(() => {}) // Navigation can cancel a transition before it is ready.
       .finally(() => {
-        transition.finished.finally(() => { transitioning.current = false; });
+        transition.finished.finally(() => {
+          document.documentElement.classList.remove("theme-switching");
+          transitioning.current = false;
+        });
       });
   };
 

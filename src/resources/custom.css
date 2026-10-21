@@ -1,4 +1,9 @@
 /* Keep the live new theme underneath while the old theme contracts to the toggle. */
+html.theme-switching,
+html.theme-switching * {
+  transition-property: none !important;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
