@@ -1,12 +1,22 @@
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { person, social } from "@/resources";
+import { person as defaultPerson, social as defaultSocial } from "@/resources";
+import type { SocialLink } from "@/lib/content/format";
 import styles from "./Footer.module.scss";
 
-export const Footer = () => {
+// Props let the editor preview show unsaved name/link changes; the site uses the defaults.
+export const Footer = ({
+  name = defaultPerson.name,
+  social = defaultSocial as SocialLink[],
+  className,
+}: {
+  name?: string;
+  social?: SocialLink[];
+  className?: string;
+}) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
+    <Row as="footer" className={className} fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
       <Row
         className={styles.mobile}
         maxWidth="m"
@@ -23,7 +33,7 @@ export const Footer = () => {
       >
         <Text variant="body-default-s" onBackground="neutral-strong">
           <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
+          <Text paddingX="4">{name}</Text>
           <Text onBackground="neutral-weak">
             {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
             / Build your portfolio with{" "}
@@ -37,7 +47,7 @@ export const Footer = () => {
                 <IconButton
                   key={item.name}
                   href={item.link}
-                  icon={item.icon}
+                  icon={item.icon as any}
                   tooltip={item.name}
                   size="s"
                   variant="ghost"

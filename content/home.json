@@ -1,0 +1,11 @@
+{
+  "title": "Justin Morrie Sacdalan — Developer & creative",
+  "description": "Selected software projects by Justin Sacdalan: mobile apps, creative web experiences, games and systems.",
+  "headline": "Building useful things, and curious ones.",
+  "subline": "I’m Justin, a Computer Science student at De La Salle University. I build practical tools, playful interfaces and digital experiences that connect technology with creativity.",
+  "featured": {
+    "display": true,
+    "title": "Latest project · Gastos.io ↗",
+    "href": "/work/gastos-io"
+  }
+}
