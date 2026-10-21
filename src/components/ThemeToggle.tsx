@@ -56,6 +56,7 @@ export const ThemeToggle: React.FC = () => {
           {
             duration: 950,
             easing: "cubic-bezier(0.45, 0, 0.2, 1)",
+            fill: "forwards",
             pseudoElement: "::view-transition-old(root)",
           },
         );

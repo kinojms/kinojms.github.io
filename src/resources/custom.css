@@ -2,13 +2,11 @@
 html[data-theme="dark"] {
   --portfolio-glass: rgba(9, 17, 27, .83);
   --portfolio-nav: rgba(14, 23, 35, .85);
-  --portfolio-glass-border: rgba(225, 236, 250, .18);
 }
 
 html[data-theme="light"] {
   --portfolio-glass: rgba(246, 249, 253, .91);
   --portfolio-nav: rgba(248, 250, 254, .89);
-  --portfolio-glass-border: rgba(37, 56, 77, .21);
 }
 
 html {
@@ -27,62 +25,25 @@ html {
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  background: #1e2b3b url('/images/armored-landscape.webp') center center / cover no-repeat;
+  /* Pre-blurred image: a static full-viewport backdrop-filter is re-rendered
+     every frame of the theme spotlight and can glitch on laptop GPUs. */
+  background: #1e2b3b url('/images/armored-landscape-blur.webp') center center / cover no-repeat;
 }
 
+/* Full-page frosted glass tint, no card or border. */
 .portfolio-body::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: rgba(10, 19, 31, .24);
-}
-
-.portfolio-body > main {
-  position: relative;
-  z-index: 0;
-}
-
-.portfolio-body > main::before {
-  content: "";
-  position: absolute;
-  inset: 1rem clamp(.35rem, 2.4vw, 2rem);
-  z-index: -1;
-  border: 1px solid var(--portfolio-glass-border);
-  border-radius: 26px;
   background: var(--portfolio-glass);
-  backdrop-filter: blur(22px) saturate(1.25);
-  -webkit-backdrop-filter: blur(22px) saturate(1.25);
-  box-shadow: 0 24px 75px rgba(0, 0, 0, .18);
 }
 
 .portfolio-nav {
   background: var(--portfolio-nav) !important;
-  border-color: var(--portfolio-glass-border);
   backdrop-filter: blur(25px) saturate(1.25);
   -webkit-backdrop-filter: blur(25px) saturate(1.25);
-}
-
-.portfolio-body > footer {
-  position: relative;
-  z-index: 1;
-  width: fit-content;
-  max-width: calc(100% - 1rem);
-  margin: 1rem auto;
-  padding: .6rem 1rem;
-  border: 1px solid var(--portfolio-glass-border);
-  border-radius: 16px;
-  background: var(--portfolio-nav);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-@media (max-width: 700px) {
-  .portfolio-body > main::before {
-    inset: .25rem 0;
-    border-radius: 20px;
-  }
 }
 
 /* Keep the live new theme underneath while the old theme contracts to the toggle. */
