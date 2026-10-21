@@ -77,8 +77,10 @@ describe("helpers", () => {
     const c = contentFromFiles(repoFiles());
     c.projects[0].body += "\n![shot](/images/projects/extra.png)";
     const refs = referencedImages(c);
-    expect(refs.has("/images/justin-avatar.png")).toBe(true);
-    expect(refs.has("/images/projects/gastos-io.png")).toBe(true);
+    // Read from the current content so the test survives edits made in the editor.
+    expect(refs.has(c.site.person.avatar)).toBe(true);
+    const cover = c.projects.find((p) => p.images[0])!.images[0];
+    expect(refs.has(cover)).toBe(true);
     expect(refs.has("/images/projects/extra.png")).toBe(true);
   });
 });

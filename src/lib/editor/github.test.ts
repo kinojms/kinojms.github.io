@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeGitHub } from "./fake-github.mjs";
 import { createGitHub, GitHubError, SITE_REPO, type Snapshot } from "./github";
 import { computeChanges, pullRequestBody, rebaseEdits, snapshotContent, type PendingImages } from "./changes";
-import { contentFiles, type PortfolioContent } from "@/lib/content/format";
+import { contentFiles, contentFromFiles, serializeJson, type PortfolioContent } from "@/lib/content/format";
 
 function contentDir(): Record<string, string> {
   const files: Record<string, string> = {};
@@ -19,10 +19,18 @@ function contentDir(): Record<string, string> {
   return files;
 }
 
-const IMAGES = [
-  "public/images/justin-avatar.png",
-  ...fs.readdirSync("public/images/projects").map((f) => `public/images/projects/${f}`),
-];
+// Every image file in the repo (tests must not depend on specific projects or avatars,
+// because the content is edited from the site).
+function imageFiles(dir = "public/images"): string[] {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = `${dir}/${e.name}`;
+    return e.isDirectory() ? imageFiles(p) : /\.(png|jpe?g|webp|gif|avif)$/i.test(e.name) ? [p] : [];
+  });
+}
+const IMAGES = imageFiles();
+const current = () => contentFromFiles(contentDir());
+/** The oldest project that has a cover under /images/projects/ (a safe one to "delete"). */
+const victim = () => [...current().projects].reverse().find((p) => p.images[0]?.startsWith("/images/projects/"))!;
 
 let fake: any;
 let gh: ReturnType<typeof createGitHub>;
@@ -49,7 +57,7 @@ describe("load", () => {
     expect(snap.pr).toBeNull();
     expect(Object.keys(snap.files).sort()).toEqual(Object.keys(contentDir()).sort());
     expect(snap.files["content/site.json"].text).toBe(contentDir()["content/site.json"]);
-    expect(snap.images["public/images/justin-avatar.png"]).toBeTruthy();
+    expect(snap.images[`public${current().site.person.avatar}`]).toBeTruthy();
   });
 
   it("explains a bad or read-only token", async () => {
@@ -70,30 +78,47 @@ describe("computeChanges", () => {
       c.home.headline = "New headline";
       c.projects[0].summary = "Changed";
     });
-    expect(set.writes.map((w) => w.path).sort()).toEqual(["content/home.json", `content/projects/${"gastos-io"}.md`]);
-    expect(set.summary).toEqual(["Home page", "Edited project “Gastos.io”"]);
+    const first = snapshotContent(await gh.load()).projects[0];
+    expect(set.writes.map((w) => w.path).sort()).toEqual(["content/home.json", `content/projects/${first.slug}.md`]);
+    expect(set.summary).toEqual(["Home page", `Edited project “${first.title}”`]);
   });
 
   it("adds new projects with their uploaded cover and deletes unused images", async () => {
     const snap = await gh.load();
+    const gone = victim();
     const { set } = await edit(
       snap,
       (c) => {
-        c.projects = c.projects.filter((p) => p.slug !== "educonnect");
+        c.projects = c.projects.filter((p) => p.slug !== gone.slug);
         c.projects.push({ ...c.projects[0], slug: "bean-board", title: "The Bean Board", images: ["/images/uploads/bean.webp"], body: "Hi" });
       },
       { "/images/uploads/bean.webp": tiny, "/images/uploads/unused.webp": tiny },
     );
     expect(set.writes.map((w) => w.path).sort()).toEqual(["content/projects/bean-board.md", "public/images/uploads/bean.webp"]);
-    expect(set.deletes.sort()).toEqual(["content/projects/educonnect.md", "public/images/projects/educonnect.png"]);
+    expect(set.deletes.sort()).toEqual([`content/projects/${gone.slug}.md`, `public${gone.images[0]}`].sort());
     expect(set.summary).toContain("New project “The Bean Board”");
-    expect(set.summary).toContain("Deleted project “Lasallian EduConnect Hub”".replace("Lasallian EduConnect Hub", snapshotContent(snap).projects.find((p) => p.slug === "educonnect")!.title));
+    expect(set.summary).toContain(`Deleted project “${gone.title}”`);
   });
 
-  it("never deletes the original avatar", async () => {
-    const { set } = await edit(await gh.load(), (c) => (c.site.person.avatar = "/images/uploads/me.webp"), { "/images/uploads/me.webp": tiny });
-    expect(set.deletes).toEqual([]);
+  it("only ever deletes images in projects/ or uploads/ (never other avatars or site images)", async () => {
+    const snap = await gh.load();
+    const old = snapshotContent(snap).site.person.avatar;
+    const { set } = await edit(snap, (c) => (c.site.person.avatar = "/images/uploads/me.webp"), { "/images/uploads/me.webp": tiny });
+    const deletable = old.startsWith("/images/uploads/") || old.startsWith("/images/projects/");
+    expect(set.deletes).toEqual(deletable ? [`public${old}`] : []);
     expect(set.writes.map((w) => w.path).sort()).toEqual(["content/site.json", "public/images/uploads/me.webp"]);
+  });
+
+  it("keeps images outside projects/ and uploads/ even when unused", async () => {
+    // Point the avatar at a site image, then replace it: the site image must survive.
+    const base = await gh.load();
+    const site = JSON.parse(contentDir()["content/site.json"]);
+    site.person.avatar = "/images/og/home.jpg";
+    fake.state.commitDirect("main", { "content/site.json": serializeJson(site), "public/images/og/home.jpg": "img" });
+    void base;
+    const snap = await gh.load();
+    const { set } = await edit(snap, (c) => (c.site.person.avatar = "/images/uploads/me.webp"), { "/images/uploads/me.webp": tiny });
+    expect(set.deletes).toEqual([]);
   });
 });
 
@@ -125,7 +150,9 @@ describe("save", () => {
 
   it("blocks saving when the same file changed on GitHub after loading", async () => {
     const snap = await gh.load();
-    fake.state.commitDirect("main", { "content/home.json": contentDir()["content/home.json"].replace("Building", "Made on GitHub") });
+    const home = JSON.parse(contentDir()["content/home.json"]);
+    home.headline = "Made on GitHub";
+    fake.state.commitDirect("main", { "content/home.json": serializeJson(home) });
     const { save } = await edit(snap, (c) => (c.home.headline = "Mine"));
     await expect(save()).rejects.toMatchObject({ kind: "conflict", paths: ["content/home.json"] });
     expect(fake.state.pulls).toHaveLength(0);
@@ -148,19 +175,24 @@ describe("save", () => {
 
   it("removes deleted files and uploads binary images", async () => {
     const snap = await gh.load();
+    const gone = victim();
+    const replaced = current().projects.find((p) => p.slug !== gone.slug && p.images[0])!;
     const res = await (
       await edit(
         snap,
         (c) => {
-          c.projects = c.projects.filter((p) => p.slug !== "educonnect");
-          c.projects[0].images = ["/images/uploads/new.webp"];
+          c.projects = c.projects.filter((p) => p.slug !== gone.slug);
+          c.projects.find((p) => p.slug === replaced.slug)!.images = ["/images/uploads/new.webp"];
         },
         { "/images/uploads/new.webp": tiny },
       )
     ).save();
-    expect(fake.state.has(res.branch, "content/projects/educonnect.md")).toBe(false);
-    expect(fake.state.has(res.branch, "public/images/projects/educonnect.png")).toBe(false);
-    expect(fake.state.has(res.branch, "public/images/projects/gastos-io.png")).toBe(false);
+    expect(fake.state.has(res.branch, `content/projects/${gone.slug}.md`)).toBe(false);
+    expect(fake.state.has(res.branch, `public${gone.images[0]}`)).toBe(false);
+    const oldCover = replaced.images[0];
+    const stillUsed = current().projects.some((p) => p.slug !== replaced.slug && p.images.includes(oldCover));
+    const deletable = oldCover.startsWith("/images/projects/") || oldCover.startsWith("/images/uploads/");
+    expect(fake.state.has(res.branch, `public${oldCover}`)).toBe(stillUsed || !deletable);
     expect(fake.state.has(res.branch, "public/images/uploads/new.webp")).toBe(true);
   });
 
@@ -231,7 +263,10 @@ describe("review fixes", () => {
     const base = await gh.load();
     const content = clone(snapshotContent(base));
     content.home.headline = "Mine";
-    fake.state.commitDirect("main", { "content/about.json": contentDir()["content/about.json"].replace("Building for people.", "From GitHub") });
+    // Someone renames an About section on GitHub (independent of the current wording).
+    const about = JSON.parse(contentDir()["content/about.json"]);
+    about.sections[1].heading = "From GitHub";
+    fake.state.commitDirect("main", { "content/about.json": serializeJson(about) });
     const fresh = await gh.load();
     const rebased = rebaseEdits(base, content, {}, fresh)!;
     expect(rebased.home.headline).toBe("Mine");
@@ -243,7 +278,9 @@ describe("review fixes", () => {
     const base = await gh.load();
     const content = clone(snapshotContent(base));
     content.home.headline = "Mine";
-    fake.state.commitDirect("main", { "content/home.json": contentDir()["content/home.json"].replace("Building", "GitHub") });
+    const home = JSON.parse(contentDir()["content/home.json"]);
+    home.headline = "Changed on GitHub";
+    fake.state.commitDirect("main", { "content/home.json": serializeJson(home) });
     expect(rebaseEdits(base, content, {}, await gh.load())).toBeNull();
   });
 });
