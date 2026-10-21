@@ -6,6 +6,11 @@ import type { PendingImages } from "./changes";
 
 const KEY = "portfolio-editor-draft-v1";
 
+const mimeOf = (path: string) => {
+  const ext = path.split(".").pop()?.toLowerCase();
+  return ext === "jpg" || ext === "jpeg" ? "image/jpeg" : ext === "png" ? "image/png" : "image/webp";
+};
+
 export type StoredDraft = {
   /** The repository state the edits were made on (used for diffing and conflict checks). */
   snapshot: Snapshot;
@@ -17,7 +22,11 @@ export type StoredDraft = {
 export function readDraft(): StoredDraft | null {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as StoredDraft) : null;
+    if (!raw) return null;
+    const draft = JSON.parse(raw) as StoredDraft;
+    // Images are stored once (base64); rebuild their data URLs.
+    for (const [path, img] of Object.entries(draft.pending || {})) img.dataUrl = `data:${mimeOf(path)};base64,${img.base64}`;
+    return draft;
   } catch {
     return null;
   }
@@ -26,7 +35,8 @@ export function readDraft(): StoredDraft | null {
 /** Returns false if the browser refused (e.g. storage full because of large images). */
 export function writeDraft(draft: StoredDraft): boolean {
   try {
-    localStorage.setItem(KEY, JSON.stringify(draft));
+    const pending = Object.fromEntries(Object.entries(draft.pending).map(([p, i]) => [p, { dataUrl: "", base64: i.base64 }]));
+    localStorage.setItem(KEY, JSON.stringify({ ...draft, pending }));
     return true;
   } catch {
     return false;

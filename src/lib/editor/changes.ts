@@ -77,6 +77,25 @@ export function computeChanges(snapshot: Snapshot, content: PortfolioContent, pe
   return { writes, deletes, summary };
 }
 
+/**
+ * Move unsaved edits made on an older version (`base`) onto the latest version (`fresh`).
+ * Only the files the edits touched are carried over, so changes made on GitHub to other
+ * files are kept. Returns null if any touched file also changed on GitHub (a real conflict).
+ */
+export function rebaseEdits(base: Snapshot, content: PortfolioContent, pending: PendingImages, fresh: Snapshot): PortfolioContent | null {
+  const { writes, deletes } = computeChanges(base, content, pending);
+  const touched = [...writes.map((w) => w.path), ...deletes];
+  for (const path of touched) {
+    const was = base.files[path]?.sha ?? base.images[path];
+    const now = fresh.files[path]?.sha ?? fresh.images[path];
+    if (was !== now) return null;
+  }
+  const files: Record<string, string> = Object.fromEntries(Object.entries(fresh.files).map(([p, f]) => [p, f.text]));
+  for (const w of writes) if (w.text != null) files[w.path] = w.text;
+  for (const d of deletes) delete files[d];
+  return contentFromFiles(files);
+}
+
 export function pullRequestBody(summary: string[], note: string): string {
   return [
     note.trim() || "Edited from the in-site editor.",

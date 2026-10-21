@@ -116,6 +116,12 @@ export function createFakeGitHub(seed) {
       state.refs[b] = body.sha;
       return json(200, { object: { sha: body.sha } });
     }
+    if ((m = p.match(/^\/git\/refs\/heads\/(.+)$/)) && method === "DELETE") {
+      const b = decodeURIComponent(m[1]);
+      if (!state.refs[b]) return json(422, { message: "Reference does not exist" });
+      delete state.refs[b];
+      return new Response(null, { status: 204 });
+    }
     if (p === "/git/refs" && method === "POST") {
       const b = body.ref.replace(/^refs\/heads\//, "");
       if (state.refs[b]) return json(422, { message: "Reference already exists" });

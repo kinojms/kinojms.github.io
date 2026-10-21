@@ -96,6 +96,7 @@ describe("validate", () => {
     c.site.social[0].link = "javascript:alert(1)";
     c.projects[1].slug = c.projects[0].slug;
     c.projects[2].publishedAt = "Oct 2026";
+    c.projects[4].publishedAt = "2026-02-30";
     c.projects[3].slug = "Bad Slug";
     c.home.featured.href = "/work/nope";
     const messages = validate(c).map((i) => i.message).join("\n");
@@ -103,6 +104,7 @@ describe("validate", () => {
     expect(messages).toMatch(/needs a full URL/);
     expect(messages).toMatch(/already uses the web address/);
     expect(messages).toMatch(/Date must look like/);
+    expect(validate(c).filter((i) => /Date must/.test(i.message))).toHaveLength(2);
     expect(messages).toMatch(/lowercase letters/);
     expect(messages).toMatch(/doesn't exist/);
   });

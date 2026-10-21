@@ -3,7 +3,7 @@ import path from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeGitHub } from "./fake-github.mjs";
 import { createGitHub, GitHubError, SITE_REPO, type Snapshot } from "./github";
-import { computeChanges, pullRequestBody, snapshotContent, type PendingImages } from "./changes";
+import { computeChanges, pullRequestBody, rebaseEdits, snapshotContent, type PendingImages } from "./changes";
 import { contentFiles, type PortfolioContent } from "@/lib/content/format";
 
 function contentDir(): Record<string, string> {
@@ -182,3 +182,69 @@ describe("save", () => {
     expect(contentFiles(snapshotContent(again))).toEqual(contentFiles(content));
   });
 });
+
+describe("review fixes", () => {
+  it("save returns the next snapshot directly, identical to a fresh load", async () => {
+    const snap = await gh.load();
+    const res = await (await edit(snap, (c) => (c.home.headline = "Next"))).save();
+    const loaded = await gh.load();
+    expect({ ...res.snapshot, loadedAt: "" }).toEqual({ ...loaded, loadedAt: "" });
+    expect(res.snapshot.pr?.number).toBe(1);
+  });
+
+  it("does not open a second PR even if GitHub's PR list lags right after saving", async () => {
+    let snap = await gh.load();
+    const first = await (await edit(snap, (c) => (c.home.headline = "One"))).save();
+    // Simulate the lag: the PR list is empty for a moment.
+    const pulls = fake.state.pulls;
+    fake.state.pulls = [];
+    snap = first.snapshot; // what the editor continues from
+    fake.state.pulls = pulls;
+    const second = await (await edit(snap, (c) => (c.home.subline = "Two"))).save();
+    expect(second.created).toBe(false);
+    expect(fake.state.pulls).toHaveLength(1);
+  });
+
+  it("removes the new branch if opening the pull request fails", async () => {
+    const snap = await gh.load();
+    const { save } = await edit(snap, (c) => (c.home.headline = "x"));
+    const real = fake.fetch;
+    const wrapped = async (input: any, init: any = {}) =>
+      String(input).endsWith("/pulls") && init.method === "POST" ? new Response(JSON.stringify({ message: "Validation Failed" }), { status: 422 }) : real(input, init);
+    gh = createGitHub("good", SITE_REPO, wrapped as any);
+    await expect(gh.save({ snapshot: snap, ...(await edit(snap, (c) => (c.home.headline = "x"))).set, title: "t", body: "" })).rejects.toMatchObject({ kind: "other" });
+    expect(Object.keys(fake.state.refs).filter((r) => r.startsWith("edit/"))).toEqual([]);
+    void save;
+  });
+
+  it("explains a write the token isn't allowed to make (404 on POST)", async () => {
+    const snap = await gh.load();
+    fake.state.failNext = null;
+    const real = fake.fetch;
+    gh = createGitHub("good", SITE_REPO, (async (input: any, init: any = {}) =>
+      init.method === "POST" ? new Response(JSON.stringify({ message: "Not Found" }), { status: 404 }) : real(input, init)) as any);
+    const { set } = await edit(snap, (c) => (c.home.headline = "x"));
+    await expect(gh.save({ snapshot: snap, ...set, title: "t", body: "" })).rejects.toMatchObject({ kind: "forbidden" });
+  });
+
+  it("rebases unsaved edits onto a newer version when the touched files didn't change", async () => {
+    const base = await gh.load();
+    const content = clone(snapshotContent(base));
+    content.home.headline = "Mine";
+    fake.state.commitDirect("main", { "content/about.json": contentDir()["content/about.json"].replace("Building for people.", "From GitHub") });
+    const fresh = await gh.load();
+    const rebased = rebaseEdits(base, content, {}, fresh)!;
+    expect(rebased.home.headline).toBe("Mine");
+    expect(rebased.about.sections[1].heading).toBe("From GitHub"); // GitHub's change kept
+    expect(computeChanges(fresh, rebased, {}).writes.map((w) => w.path)).toEqual(["content/home.json"]);
+  });
+
+  it("refuses to rebase when a touched file changed on GitHub", async () => {
+    const base = await gh.load();
+    const content = clone(snapshotContent(base));
+    content.home.headline = "Mine";
+    fake.state.commitDirect("main", { "content/home.json": contentDir()["content/home.json"].replace("Building", "GitHub") });
+    expect(rebaseEdits(base, content, {}, await gh.load())).toBeNull();
+  });
+});
+

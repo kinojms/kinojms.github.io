@@ -50,7 +50,14 @@ export type SaveRequest = {
   body: string;
 };
 
-export type SaveResult = { branch: string; commitSha: string; pr: DraftPR; created: boolean };
+export type SaveResult = {
+  branch: string;
+  commitSha: string;
+  pr: DraftPR;
+  created: boolean;
+  /** The repository state right after the save, to continue editing from (no reload needed). */
+  snapshot: Snapshot;
+};
 
 type Fetch = typeof fetch;
 
@@ -117,8 +124,17 @@ export function createGitHub(token: string, repo: RepoConfig = SITE_REPO, fetchI
       throw new GitHubError("GitHub's rate limit was reached. Wait a few minutes and try again.", "ratelimit", res.status);
     if (res.status === 403)
       throw new GitHubError("This token doesn't have permission for that. It needs Contents and Pull requests set to “Read and write” for this repository.", "forbidden", 403);
+    // Writes to a repository the token can't write to come back as 404 (GitHub hides it).
+    if (res.status === 404 && method !== "GET")
+      throw new GitHubError(
+        "GitHub refused to save. Check that the token includes the kinojms.github.io repository with Contents and Pull requests set to “Read and write”.",
+        "forbidden",
+        404,
+      );
     if (res.status === 404) throw new GitHubError(detail || "Not found.", "notfound", 404);
-    if (res.status === 409 || res.status === 422) throw new GitHubError(detail || "GitHub rejected the change.", "conflict", res.status);
+    if (res.status === 409 || (res.status === 422 && /already exists|fast[- ]forward/i.test(detail)))
+      throw new GitHubError(detail || "GitHub rejected the change.", "conflict", res.status);
+    if (res.status === 422) throw new GitHubError(`GitHub rejected the change${detail ? `: ${detail}` : "."}`, "other", 422);
     throw new GitHubError(`GitHub error ${res.status}${detail ? `: ${detail}` : ""}`, "other", res.status);
   }
 
@@ -248,12 +264,34 @@ export function createGitHub(token: string, repo: RepoConfig = SITE_REPO, fetchI
     });
     const commit = await request<any>("POST", "/git/commits", { message: req.title, tree: tree.sha, parents: [head] });
 
+    // Snapshot of the new commit, built from git data (the pull request list can lag behind).
+    const after = async (branch: string, pr: DraftPR): Promise<Snapshot> => {
+      const t = await request<any>("GET", `/git/trees/${tree.sha}?recursive=1`);
+      const written = new Map(req.writes.filter((w) => w.text != null).map((w) => [w.path, w.text as string]));
+      const files: Record<string, LoadedFile> = {};
+      const images: Record<string, string> = {};
+      const fetchList: { path: string; sha: string }[] = [];
+      for (const e of t.tree) {
+        if (e.type !== "blob") continue;
+        if (isImageFile(e.path)) images[e.path] = e.sha;
+        if (!isContentFile(e.path)) continue;
+        if (written.has(e.path)) files[e.path] = { text: written.get(e.path)!, sha: e.sha };
+        else if (snapshot.files[e.path]?.sha === e.sha) files[e.path] = snapshot.files[e.path];
+        else fetchList.push({ path: e.path, sha: e.sha });
+      }
+      await mapLimit(fetchList, 6, async ({ path, sha }) => {
+        const blob = await request<any>("GET", `/git/blobs/${sha}`);
+        files[path] = { text: decodeBase64Utf8(blob.content), sha };
+      });
+      return { branch, headSha: commit.sha, pr, files, images, loadedAt: new Date().toISOString() };
+    };
+
     if (snapshot.pr) {
       await request("PATCH", `/git/refs/heads/${snapshot.branch.split("/").map(encodeURIComponent).join("/")}`, {
         sha: commit.sha,
         force: false,
       });
-      return { branch: snapshot.branch, commitSha: commit.sha, pr: snapshot.pr, created: false };
+      return { branch: snapshot.branch, commitSha: commit.sha, pr: snapshot.pr, created: false, snapshot: await after(snapshot.branch, snapshot.pr) };
     }
 
     let branch = "";
@@ -266,8 +304,16 @@ export function createGitHub(token: string, repo: RepoConfig = SITE_REPO, fetchI
         if (!(e instanceof GitHubError && e.kind === "conflict") || attempt === 3) throw e;
       }
     }
-    const pr = await request<any>("POST", "/pulls", { title: req.title, head: branch, base: repo.base, body: req.body });
-    return { branch, commitSha: commit.sha, pr: { number: pr.number, url: pr.html_url, branch }, created: true };
+    let pr: any;
+    try {
+      pr = await request<any>("POST", "/pulls", { title: req.title, head: branch, base: repo.base, body: req.body });
+    } catch (e) {
+      // Don't leave a branch without a pull request behind (it would never be found again).
+      await request("DELETE", `/git/refs/heads/${branch.split("/").map(encodeURIComponent).join("/")}`).catch(() => {});
+      throw e;
+    }
+    const draft = { number: pr.number, url: pr.html_url, branch };
+    return { branch, commitSha: commit.sha, pr: draft, created: true, snapshot: await after(branch, draft) };
   }
 
   return { request, checkAccess, findDraft, load, save, blobBase64 };

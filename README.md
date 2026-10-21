@@ -41,6 +41,6 @@ Code and design: routes, palette and theme in `src/resources/once-ui.config.ts`;
 
 ## Checks
 
-`npm test` runs the unit tests (content round-trip, change sets, save flow against a fake GitHub). Every pull request is built by `.github/workflows/pr-build.yml`. The live-API test only runs with a token: `PRACTICE_TOKEN=$(gh auth token) npx vitest run github.live` (uses the private `kinojms/portfolio-editor-test` repo).
+`npm test` runs the unit tests (content round-trip, change sets, save flow against a fake GitHub). Every pull request is type-checked, tested and built by `.github/workflows/ci.yml`. The live-API test only runs with a token: `PRACTICE_TOKEN=$(gh auth token) npx vitest run github.live` (uses the private `kinojms/portfolio-editor-test` repo).
 
 The cover studio (`thumbnails/index.html?project=pocket-gains`, served with `python -m http.server 8123`) renders HTML/CSS cover art for projects without screenshots.

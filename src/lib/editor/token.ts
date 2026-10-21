@@ -28,6 +28,6 @@ export const TOKEN_URL =
   "?name=Portfolio%20editor" +
   "&description=Edits%20kinojms.github.io%20from%20%2Fedit" +
   "&target_name=kinojms" +
-  "&expires_in=90" +
+  "&expires_in=30" +
   "&contents=write" +
   "&pull_requests=write";

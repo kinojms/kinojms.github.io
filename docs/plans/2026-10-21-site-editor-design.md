@@ -87,7 +87,8 @@ Save as draft:
    for review" click and aren't available on free private repos.)
 5. Owner merges on GitHub → `pages.yml` deploys.
 
-CI **(review)**: new `.github/workflows/pr-build.yml` on `pull_request` to `main`,
+CI **(review)**: the existing `.github/workflows/ci.yml` (typecheck + `npm test` + build) runs on every
+`pull_request` (a separate `pr-build.yml` was merged into it after code review),
 `contents: read`, its own concurrency group, `npm ci && npm run build`, no deploy.
 `pages.yml` is untouched, so PR builds can never cancel a production deploy.
 

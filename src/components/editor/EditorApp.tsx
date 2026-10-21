@@ -7,7 +7,7 @@ import { AboutForm, HomeForm, ProfileForm, ProjectsForm, SaveForm, type Update }
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { imageRepoPath, referencedImages, validate, type PortfolioContent } from "@/lib/content/format";
 import { createGitHub, GitHubError, SITE_REPO, type Snapshot } from "@/lib/editor/github";
-import { computeChanges, pullRequestBody, snapshotContent, type PendingImages } from "@/lib/editor/changes";
+import { computeChanges, pullRequestBody, rebaseEdits, snapshotContent, type PendingImages } from "@/lib/editor/changes";
 import { clearDraft, readDraft, writeDraft } from "@/lib/editor/draftStore";
 import { clearToken, getToken, setToken, TOKEN_URL } from "@/lib/editor/token";
 import { sameView, withPendingImages, type FromPreview, type PreviewView, type ToPreview } from "@/lib/editor/preview";
@@ -58,7 +58,7 @@ function Editor() {
   const [pending, setPending] = useState<PendingImages>({});
   // Images saved to the draft branch but not on the live site yet (shown in the preview only).
   const [draftImages, setDraftImages] = useState<Record<string, string>>({});
-  const [restored, setRestored] = useState<"same" | "older" | null>(null);
+  const [restored, setRestored] = useState<"same" | "rebased" | "older" | null>(null);
   const [resetKey, setResetKey] = useState(0);
 
   const [tab, setTab] = useState<Tab>("profile");
@@ -95,7 +95,17 @@ function Editor() {
         setLogin(who.login);
         const snap = await gh.load();
         const stored = opts.keepDraft ? readDraft() : null;
-        if (stored) {
+        const rebased =
+          stored && !(stored.snapshot.headSha === snap.headSha && stored.snapshot.branch === snap.branch)
+            ? rebaseEdits(stored.snapshot, stored.content, stored.pending || {}, snap)
+            : null;
+        if (stored && rebased) {
+          // The site changed since these edits, but not the parts they touch: carry them over.
+          setSnapshot(snap);
+          setContent(rebased);
+          setPending(stored.pending || {});
+          setRestored("rebased");
+        } else if (stored) {
           // Keep the version the edits were made on so conflicting changes are detected on save.
           setSnapshot(stored.snapshot);
           setContent(stored.content);
@@ -250,8 +260,8 @@ function Editor() {
     try {
       const title = note.trim() || `Edit portfolio: ${changes.summary.slice(0, 3).join(", ")}${changes.summary.length > 3 ? ", …" : ""}`;
       const res = await gh.save({ snapshot, writes: changes.writes, deletes: changes.deletes, title, body: pullRequestBody(changes.summary, note) });
-      // Start the next round of edits from what was just saved.
-      const fresh = await gh.load();
+      // Continue from exactly what was just saved (GitHub's pull request list can lag behind).
+      const fresh = res.snapshot;
       setDraftImages((d) => ({ ...d, ...Object.fromEntries(Object.entries(pending).map(([p, i]) => [p, i.dataUrl])) }));
       clearDraft();
       setSnapshot(fresh);
@@ -387,8 +397,10 @@ function Editor() {
               <div className={`${s.notice} ${restored === "older" ? s.noticeWarn : ""}`}>
                 <div className={s.noticeTitle}>Restored your unsaved changes</div>
                 {restored === "older"
-                  ? "They were made on an older version of the site. If the same content changed on GitHub since, saving will stop and ask you to reload."
-                  : "Picked up where you left off."}{" "}
+                  ? "They were made on an older version, and some of the same content has changed on GitHub since. Saving will stop and ask you to reload; copy anything you want to keep first."
+                  : restored === "rebased"
+                    ? "The site changed on GitHub since, but not the parts you edited, so your edits were moved onto the latest version."
+                    : "Picked up where you left off."}{" "}
                 <button className={`${s.btn} ${s.btnSmall} ${s.btnGhost}`} onClick={() => setRestored(null)}>
                   OK
                 </button>

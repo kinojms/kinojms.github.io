@@ -288,6 +288,14 @@ export function ProjectsForm(
 
   const isNew = !savedSlugs.has(project.slug);
   const set = (fn: (p: Project) => void) => update((d) => fn(d.projects[index]));
+  /** Never let two projects share a web address (the form would jump to the other one). */
+  const unique = (slug: string) => {
+    const taken = new Set(content.projects.filter((_, i) => i !== index).map((p) => p.slug));
+    if (!slug || !taken.has(slug)) return slug;
+    let n = 2;
+    while (taken.has(`${slug}-${n}`)) n++;
+    return `${slug}-${n}`;
+  };
 
   return (
     <>
@@ -301,7 +309,7 @@ export function ProjectsForm(
           onChange={(v) => {
             // A new project's web address follows its title until it's first saved or edited by hand.
             const follow = isNew && (project.slug === slugify(project.title) || /^new-project(-\d+)?$/.test(project.slug));
-            const slug = follow ? slugify(v) || project.slug : project.slug;
+            const slug = follow ? unique(slugify(v)) || project.slug : project.slug;
             set((p) => {
               p.title = v;
               p.slug = slug;
@@ -314,7 +322,7 @@ export function ProjectsForm(
           value={project.slug}
           disabled={!isNew}
           onChange={(v) => {
-            const slug = v.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-{2,}/g, "-").replace(/^-/, "");
+            const slug = unique(v.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-{2,}/g, "-").replace(/^-/, ""));
             set((p) => void (p.slug = slug));
             onSelect(slug);
           }}

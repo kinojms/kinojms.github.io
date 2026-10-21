@@ -262,7 +262,8 @@ export function validate(content: PortfolioContent): ValidationIssue[] {
     if (!SLUG_RE.test(p.slug)) issues.push({ where, message: "Web address may only use lowercase letters, numbers and dashes." });
     if (seen.has(p.slug)) issues.push({ where, message: `Another project already uses the web address “${p.slug}”.` });
     seen.add(p.slug);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(p.publishedAt) || Number.isNaN(Date.parse(p.publishedAt)))
+    const real = /^\d{4}-\d{2}-\d{2}$/.test(p.publishedAt) && !Number.isNaN(Date.parse(p.publishedAt)) && new Date(`${p.publishedAt}T00:00:00Z`).toISOString().slice(0, 10) === p.publishedAt;
+    if (!real)
       issues.push({ where, message: "Date must look like 2026-10-21." });
     if (p.link && !isUrl(p.link)) issues.push({ where, message: "Project link must be a full URL (https://…)." });
   }
