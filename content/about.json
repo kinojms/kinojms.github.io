@@ -3,17 +3,23 @@
   "description": "Meet Justin Morrie Sacdalan: Computer Science student, developer and digital creative at De La Salle University.",
   "hero": {
     "eyebrow": "A LITTLE ABOUT ME / JUSTIN MORRIE SACDALAN",
-    "headline": "Developer by education.",
-    "accent": "Creative by curiosity.",
-    "lede": "Hey there! I’m Justin, a Computer Science student majoring in Software Technology at De La Salle University in the Philippines. I like making things—and figuring out how to make them better.",
-    "caption": "Web · software · digital media"
+    "headline": "Keep on keeping on",
+    "accent": "Until it's done, and done right.",
+    "lede": "Cheers! I'm Justin, a Computer Science student at De La Salle University in the Philippines. I like making things—and figuring out how to make them better while having fun.",
+    "caption": "web · software · digital media"
   },
   "sections": [
     {
-      "label": "THE THREAD",
-      "heading": "Curiosity is the through-line.",
+      "label": "MORE ABOUT ME",
+      "heading": "My AGENT.md",
+      "body": "If I had to write a quick guide to working with me, it would start with this: I don't take things at face value. Whether it's a dataset, a bug, or one of the many app ideas living rent-free in my head, I like to study it first, which is why most of my time goes into planning and setting things up. Give me a clear goal and a deadline, and it'll get done. Just know that I'll probably keep nitpicking the details until it actually feels right (perfectionism is both my strength and my biggest time sink).\n\nOutside of coding, I'm into a lot of things, honestly. I build mechanical keyboards and Magic: The Gathering decks, practice my coffee-making (someday I'd love to run my own café), and window-shop PCs and laptops I definitely can't afford yet. I also play more gacha games than I'd like to admit, grind through Warframe and Monster Hunter, and binge manga and manhwa before chasing down the novels they came from.\n\nMost of these interests sneak into my work one way or another. A few of my projects hide small references to the games and stories I love, so if you catch one, it'll probably make my day. If not, that's totally fine too (my tastes are kinda niche).",
+      "tags": []
+    },
+    {
+      "label": "ABOUT MY PROJECTS",
+      "heading": "Well of Ideas.",
       "tags": [],
-      "body": "I’m drawn to the space between technology and digital creativity. A web application, an interface, a video, or an unfamiliar idea: I enjoy turning the initial concept into something people can use or enjoy.\n\nMy background is in web and software development, with hands-on work across React, Next.js, TypeScript, JavaScript, Python and Kotlin. I care as much about how an interface feels as how it works behind the scenes.\n\nThat curiosity has led to projects like [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a game-inspired workout companion. Each project is another chance to learn something new and refine the details."
+      "body": "Ever since I was a child, I was drawn to the space between technology and digital creativity. A web application, an interface, a video, or an unfamiliar idea: I enjoy turning the initial concept into something people can use or enjoy.\n\nMy background is in web and software development, with hands-on work across React, Next.js, TypeScript, JavaScript, Python and Kotlin. I care as much about how an interface feels as how it works behind the scenes.\n\nThat curiosity has led to projects like [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a game-inspired workout companion. Each project is another chance to learn something new and refine the details."
     },
     {
       "label": "MORE THAN CODE",
