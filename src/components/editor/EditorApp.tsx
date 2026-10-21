@@ -188,10 +188,14 @@ function Editor() {
   }, [tab, selected]);
 
   // Fetch images that exist on the draft branch but aren't served by the site yet.
+  // Each path is checked once per session (not on every keystroke).
+  const checkedImages = useRef(new Set<string>());
   useEffect(() => {
     if (!gh || !snapshot || !content) return;
-    let cancelled = false;
-    const missing = [...referencedImages(content)].filter((p) => !pending[p] && !draftImages[p] && snapshot.images[imageRepoPath(p)]);
+    const missing = [...referencedImages(content)].filter(
+      (p) => !pending[p] && !draftImages[p] && snapshot.images[imageRepoPath(p)] && !checkedImages.current.has(p),
+    );
+    missing.forEach((p) => checkedImages.current.add(p));
     (async () => {
       for (const path of missing) {
         try {
@@ -200,13 +204,10 @@ function Editor() {
           const b64 = await gh.blobBase64(snapshot.images[imageRepoPath(path)]);
           const ext = path.split(".").pop()?.toLowerCase();
           const mime = ext === "jpg" || ext === "jpeg" ? "image/jpeg" : ext === "png" ? "image/png" : ext === "gif" ? "image/gif" : "image/webp";
-          if (!cancelled) setDraftImages((d) => ({ ...d, [path]: `data:${mime};base64,${b64}` }));
+          setDraftImages((d) => ({ ...d, [path]: `data:${mime};base64,${b64}` }));
         } catch {}
       }
     })();
-    return () => {
-      cancelled = true;
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gh, snapshot, content]);
 
