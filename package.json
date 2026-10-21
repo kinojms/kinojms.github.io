@@ -7,7 +7,8 @@
     "build": "next build",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -24,7 +25,9 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.3",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "sass": "^1.86.3",
     "transliteration": "^2.3.5"
@@ -37,7 +40,8 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.25.0",
     "typescript": "^5.8.3",
-    "tzdata": "^1.0.44"
+    "tzdata": "^1.0.44",
+    "vitest": "^3.2.7"
   },
   "engines": {
     "node": ">=20.9.0"

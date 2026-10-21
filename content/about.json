@@ -1,0 +1,42 @@
+{
+  "title": "About Justin Morrie Sacdalan",
+  "description": "Meet Justin Morrie Sacdalan: Computer Science student, developer and digital creative at De La Salle University.",
+  "hero": {
+    "eyebrow": "A LITTLE ABOUT ME / JUSTIN MORRIE SACDALAN",
+    "headline": "Developer by education.",
+    "accent": "Creative by curiosity.",
+    "lede": "Hey there! I’m Justin, a Computer Science student majoring in Software Technology at De La Salle University in the Philippines. I like making things—and figuring out how to make them better.",
+    "caption": "Web · software · digital media"
+  },
+  "sections": [
+    {
+      "label": "THE THREAD",
+      "heading": "Curiosity is the through-line.",
+      "tags": [],
+      "body": "I’m drawn to the space between technology and digital creativity. A web application, an interface, a video, or an unfamiliar idea: I enjoy turning the initial concept into something people can use or enjoy.\n\nMy background is in web and software development, with hands-on work across React, Next.js, TypeScript, JavaScript, Python and Kotlin. I care as much about how an interface feels as how it works behind the scenes.\n\nThat curiosity has led to projects like [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a game-inspired workout companion. Each project is another chance to learn something new and refine the details."
+    },
+    {
+      "label": "MORE THAN CODE",
+      "heading": "Building for people.",
+      "tags": [],
+      "body": "I’m part of **The LaSallian’s Web team**, contributing to website development and the digital publishing work of DLSU’s student publication. Working alongside an editorial team has given me a greater appreciation for clarity, accessibility and the people behind what appears on screen.\n\nBeyond code, I explore graphic design, video editing and short-form content. I manage social media content independently; one TikTok channel has accumulated approximately 1.9 million views and 11,100 likes. Seeing an idea connect with an audience is just as rewarding as seeing software come together.\n\nI’ve also been involved with the La Salle Computer Society and the DLSU Data Science Society, where collaboration, events and shared curiosity have stretched me beyond the technical side of my degree."
+    },
+    {
+      "label": "HOW I WORK",
+      "heading": "Ask better questions.",
+      "tags": [
+        "Web & software",
+        "UI / UX",
+        "Digital publishing",
+        "Creative media",
+        "Data & research"
+      ],
+      "body": "I’m analytical and resourceful. Rather than accepting the first answer, I like to understand why something works, question assumptions, and try another approach when the result can be better.\n\nWhen I’m away from a project, you’ll likely find me exploring a new tool, playing video or tabletop games, experimenting with design, or sketching out another app idea."
+    }
+  ],
+  "contact": {
+    "label": "WHAT’S NEXT",
+    "heading": "Let’s make something happen.",
+    "body": "I’m open to interesting projects, creative collaborations and opportunities to learn from different perspectives. Have something in mind?"
+  }
+}

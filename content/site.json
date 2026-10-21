@@ -1,0 +1,35 @@
+{
+  "person": {
+    "firstName": "Justin",
+    "lastName": "Sacdalan",
+    "name": "Justin Morrie Sacdalan",
+    "role": "Computer Science student · Software developer",
+    "avatar": "/images/justin-avatar.png",
+    "email": "sacdalanjme@gmail.com",
+    "location": "Asia/Manila",
+    "languages": [
+      "English",
+      "Filipino"
+    ]
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/kinojms",
+      "essential": true
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/justin-sacdalan/",
+      "essential": true
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:sacdalanjme@gmail.com",
+      "essential": true
+    }
+  ]
+}

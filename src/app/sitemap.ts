@@ -1,21 +1,19 @@
-import { getPosts } from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
+import { loadProjects } from "@/lib/content/load";
 
 export const dynamic = "force-static";
 
-export default async function sitemap() {
-  const blogs = routesConfig["/blog"] ? getPosts(["src", "app", "blog", "posts"]).map((post) => ({
-    url: `${baseURL}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  })) : [];
+// The editor (/edit) is deliberately left out.
+const HIDDEN = ["/edit"];
 
-  const works = getPosts(["src", "app", "work", "projects"]).map((post) => ({
-    url: `${baseURL}/work/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
+export default async function sitemap() {
+  const works = loadProjects().map((project) => ({
+    url: `${baseURL}/work/${project.slug}`,
+    lastModified: project.publishedAt,
   }));
 
   const activeRoutes = Object.keys(routesConfig).filter(
-    (route) => routesConfig[route as keyof typeof routesConfig],
+    (route) => routesConfig[route as keyof typeof routesConfig] && !HIDDEN.includes(route),
   );
 
   const routes = activeRoutes.map((route) => ({
@@ -23,5 +21,5 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
-  return [...routes, ...blogs, ...works];
+  return [...routes, ...works];
 }
