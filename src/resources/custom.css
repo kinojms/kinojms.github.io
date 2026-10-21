@@ -149,3 +149,13 @@ html.theme-switching * {
   --scheme-neutral-600-50: rgba(137,152,159,0.5);
   /*
 }*/
+
+/* Editor preview (/edit/preview/): the preview renders its own footer with unsaved values. */
+html.is-preview .portfolio-body > footer:not(.preview-footer) {
+  display: none;
+}
+
+/* The editor covers the whole window; stop the page underneath from scrolling. */
+html:has([data-editor-shell]) {
+  overflow: hidden;
+}

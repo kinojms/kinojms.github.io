@@ -5,6 +5,7 @@
     "dev": "next dev",
     "export": "next export",
     "build": "next build",
+    "postbuild": "node scripts/inject-csp.mjs",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
     "lint": "next lint",

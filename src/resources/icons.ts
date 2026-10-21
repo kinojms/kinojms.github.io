@@ -37,6 +37,8 @@ import {
   FaWhatsapp,
   FaReddit,
   FaTelegram,
+  FaTiktok,
+  FaYoutube,
 } from "react-icons/fa6";
 
 export const iconLibrary = {
@@ -72,6 +74,8 @@ export const iconLibrary = {
   reddit: FaReddit,
   telegram: FaTelegram,
   instagram: FaInstagram,
+  tiktok: FaTiktok,
+  youtube: FaYoutube,
 } satisfies Record<string, IconType>;
 
 export type IconLibrary = typeof iconLibrary;

@@ -22,6 +22,8 @@ const routes: RoutesConfig = {
   "/work": true,
   "/blog": false,
   "/gallery": false,
+  // In-site editor: unlinked, noindex, excluded from the sitemap (see app/edit).
+  "/edit": true,
 };
 
 const display: DisplayConfig = {
