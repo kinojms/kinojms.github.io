@@ -87,7 +87,7 @@ export const Header = () => {
         </Row>
         <Row fillWidth horizontal="center">
           <Row
-            background="page"
+            className="portfolio-nav"
             border="neutral-alpha-weak"
             radius="m-4"
             shadow="l"

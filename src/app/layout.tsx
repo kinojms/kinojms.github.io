@@ -115,7 +115,7 @@ export default async function RootLayout({
       <Providers>
         <Column
           as="body"
-          background="page"
+          className="portfolio-body"
           fillWidth
           style={{ minHeight: "100vh" }}
           margin="0"

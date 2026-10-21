@@ -3,17 +3,18 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 const person: Person = {
   firstName: "Justin",
   lastName: "Sacdalan",
-  name: "Justin Sacdalan",
-  role: "Software developer",
+  name: "Justin Morrie Sacdalan",
+  role: "Computer Science student · Software developer",
   avatar: "/images/justin-avatar.png",
   email: "sacdalanjme@gmail.com",
   location: "Asia/Manila",
-  languages: [],
+  languages: ["English", "Filipino"],
   locale: "en",
 };
 
 const social: Social = [
   { name: "GitHub", icon: "github", link: "https://github.com/kinojms", essential: true },
+  { name: "LinkedIn", icon: "linkedin", link: "https://www.linkedin.com/in/justin-sacdalan/", essential: true },
   { name: "Email", icon: "email", link: `mailto:${person.email}`, essential: true },
 ];
 
@@ -23,16 +24,16 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: "Justin Sacdalan — Software developer",
+  title: "Justin Morrie Sacdalan — Developer & creative",
   description: "Selected software projects by Justin Sacdalan: mobile apps, creative web experiences, games and systems.",
   headline: <>Building useful things, and curious ones.</>,
   featured: { display: true, title: <>Latest project · Gastos.io ↗</>, href: "/work/gastos-io" },
-  subline: <>I'm Justin, a software developer. I build practical tools, playful interfaces and the systems behind them. Here is a selection of my work.</>,
+  subline: <>I’m Justin, a Computer Science student at De La Salle University. I build practical tools, playful interfaces and digital experiences that connect technology with creativity.</>,
 };
 
 const about: About = {
-  path: "/about", label: "About", title: "About Justin Sacdalan",
-  description: "Justin Sacdalan is a software developer building apps, games and web experiences.",
+  path: "/about", label: "About", title: "About Justin Morrie Sacdalan",
+  description: "Meet Justin Morrie Sacdalan: Computer Science student, developer and digital creative at De La Salle University.",
   tableOfContent: { display: false, subItems: false },
   avatar: { display: true },
   calendar: { display: false, link: "" },
