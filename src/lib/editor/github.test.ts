@@ -292,7 +292,9 @@ describe("background image", () => {
   it("uploads a new background with the draft and lists it in the summary", async () => {
     const { set } = await edit(await gh.load(), (c) => (c.site.background = uploaded("bg-a")), { [uploaded("bg-a")]: tiny });
     expect(set.writes.map((w) => w.path).sort()).toEqual(["content/site.json", `public${uploaded("bg-a")}`]);
-    expect(set.deletes).toEqual([]);
+    // Replacing an earlier uploaded background deletes it; the default is never deleted.
+    const old = current().site.background;
+    expect(set.deletes).toEqual(old?.startsWith("/images/uploads/") ? [`public${old}`] : []);
     const site = JSON.parse(set.writes.find((w) => w.path === "content/site.json")!.text!);
     expect(site.background).toBe(uploaded("bg-a"));
   });
