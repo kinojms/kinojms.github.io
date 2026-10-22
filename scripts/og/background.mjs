@@ -1,7 +1,7 @@
 // Which background image the build should use. Pure (no file access) so it can be unit-tested.
 // Keep DEFAULT_BACKGROUND and BACKGROUND_RE in sync with src/lib/content/format.ts.
 export const DEFAULT_BACKGROUND = "/images/armored-landscape.webp";
-export const BACKGROUND_RE = /^\/images\/[\w\-/]+\.(webp|jpe?g|png)$/;
+export const BACKGROUND_RE = /^\/images\/[a-z0-9_\-/]+\.(webp|jpe?g|png)$/;
 
 /**
  * @param {unknown} configured  site.background from content/site.json (may be undefined)

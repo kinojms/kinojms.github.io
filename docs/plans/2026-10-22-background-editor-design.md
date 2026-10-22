@@ -42,9 +42,9 @@ standing "go with your recommendations" preference.
 
 ## Error handling
 - Bad file / too large → existing ImagePicker messages.
-- Build: if the configured background file is missing, the generator logs a warning and falls
-  back to the default landscape rather than failing the deploy.
-- Validation: `site.background`, if set, must start with `/images/`.
+- Build: a bad or missing background **fails the build in CI** (Pages keeps the previous site live);
+  local builds warn and use the default. Restart `npm run dev` after hand-editing `site.background`.
+- Validation: `site.background`, if set, must match the lowercase `/images/…` path rule; `""` means default.
 
 ## Testing
 - Unit: `referencedImages` includes background; `computeChanges` uploads a new background and

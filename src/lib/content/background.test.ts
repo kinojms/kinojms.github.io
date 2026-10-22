@@ -28,12 +28,12 @@ describe("background", () => {
 
   it("validates the path: no traversal, quotes, brackets, external or data URLs", () => {
     const c = load();
-    const bad = ["/images/../../x.webp", "images/x.webp", '/images/x".webp', "/images/a).webp", "/images/a b.webp", "https://x.com/a.webp", "data:image/webp;base64,AA", "/images/x.gif", ""];
+    const bad = ["/images/../../x.webp", "images/x.webp", '/images/x".webp', "/images/a).webp", "/images/a b.webp", "https://x.com/a.webp", "data:image/webp;base64,AA", "/images/x.gif", "/images/Uploads/X.webp"];
     for (const b of bad) {
       c.site.background = b;
       expect(validate(c).some((i) => /Background/.test(i.message)), b).toBe(true);
     }
-    for (const ok of [undefined, "/images/uploads/background-ab12c.webp", "/images/armored-landscape.webp"]) {
+    for (const ok of [undefined, "", "/images/uploads/background-ab12c.webp", "/images/armored-landscape.webp"]) {
       c.site.background = ok;
       expect(validate(c).filter((i) => /Background/.test(i.message)), String(ok)).toEqual([]);
     }

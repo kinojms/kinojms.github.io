@@ -22,7 +22,7 @@ const hash = (buf) => createHash("sha1").update(buf).digest("hex").slice(0, 8);
 
 // ---- site background: pre-blurred once here (a live CSS blur over the whole page glitches
 // during the theme-toggle transition on some laptop GPUs).
-const background = resolveBackground(site.background, (p) => existsSync(file(`public${p}`)), !!process.env.CI);
+const background = resolveBackground(site.background, (p) => existsSync(file(`public${p}`)), /^(1|true)$/i.test(process.env.CI ?? ""));
 if (background.warning) console.warn(`og: warning: ${background.warning}`);
 const blur = await sharp(readFileSync(file(`public${background.path}`)))
   .resize(1600, 900, { fit: "cover" })

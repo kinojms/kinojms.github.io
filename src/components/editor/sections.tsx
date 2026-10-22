@@ -105,7 +105,7 @@ export function ProfileForm({ content, update, pending, addImage }: Common) {
           label="Background image"
           kind="cover"
           src={imgSrc(pending, backgroundOf(content.site))}
-          hint="A wide landscape picture (16:9) works best. Resized to fit 1600×1200."
+          hint="A wide landscape picture works best: it fills the screen, so the edges of other shapes get cropped. Changing it also updates the image shown when your link is shared."
           removeLabel="Use default"
           onRemove={
             content.site.background

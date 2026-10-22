@@ -21,8 +21,8 @@ export type SiteContent = {
 
 /** The background used when content/site.json doesn't set one. Keep in sync with scripts/og/background.mjs. */
 export const DEFAULT_BACKGROUND = "/images/armored-landscape.webp";
-/** A safe public image path: no "..", quotes, brackets or spaces (it ends up in a CSS url()). */
-export const BACKGROUND_RE = /^\/images\/[\w\-/]+\.(webp|jpe?g|png)$/;
+/** A safe public image path: lowercase, no "..", quotes, brackets or spaces (it ends up in a CSS url(), and Linux CI is case-sensitive). */
+export const BACKGROUND_RE = /^\/images\/[a-z0-9_\-/]+\.(webp|jpe?g|png)$/;
 export const backgroundOf = (site: SiteContent) => site.background || DEFAULT_BACKGROUND;
 
 export type HomeContent = {
@@ -238,7 +238,8 @@ export function validate(content: PortfolioContent): ValidationIssue[] {
   need("Profile", site.person.role, "Role");
   if (site.person.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.person.email))
     issues.push({ where: "Profile", message: "Email address doesn't look right." });
-  if (site.background !== undefined && !BACKGROUND_RE.test(site.background))
+  // "" means "use the default", same as the build script.
+  if (site.background && !BACKGROUND_RE.test(site.background))
     issues.push({ where: "Profile", message: "Background image path isn't valid. Upload the image again." });
   site.social.forEach((s, i) => {
     need("Profile", s.name, `Link ${i + 1} name`);
