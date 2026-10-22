@@ -56,7 +56,8 @@ export function HomeView({ home, aboutTitle, avatar, projects }: HomeViewProps) 
       <RevealFx translateY="16" delay={600}>
         <ProjectList projects={projects} range={[1, 1]} />
       </RevealFx>
-      <ProjectList projects={projects} range={[2, 7]} />
+      {/* Cards below the first fade in as they scroll into view (never before the first one starts). */}
+      <ProjectList projects={projects} range={[2, 7]} revealAfter={1000} />
       <Button href="/work" variant="secondary" size="m" arrowIcon>
         Explore all projects
       </Button>

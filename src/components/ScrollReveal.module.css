@@ -1,0 +1,24 @@
+/* Same wipe + blur look as Once UI's RevealFx, but triggered when the element scrolls into view. */
+.reveal {
+  transition-property: mask-position, -webkit-mask-position, filter, transform;
+  transition-timing-function: ease-in-out;
+  mask-size: 400% 100%;
+  -webkit-mask-size: 400% 100%;
+  mask-image: linear-gradient(to right, black 0%, black 25%, transparent 50%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 25%, transparent 50%);
+}
+.hidden {
+  mask-position: 100% 0;
+  -webkit-mask-position: 100% 0;
+  filter: blur(1rem);
+  transform: translateY(var(--static-space-16));
+}
+.shown {
+  mask-position: 0 0;
+  -webkit-mask-position: 0 0;
+  filter: blur(0);
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; }
+}
