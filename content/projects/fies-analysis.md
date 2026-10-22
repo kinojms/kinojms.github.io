@@ -1,14 +1,14 @@
 ---
 title: "FIES 2012 Analysis"
 publishedAt: "2025-08-04"
-summary: "Data cleaning, visualization and machine-learning exploration of a Philippine household income and expenditure survey."
+summary: "Cleaning, visualizing and running machine learning on a Philippine household income and expenditure survey."
 images: ["/images/projects/fies-analysis.png"]
 link: "https://github.com/kinojms/PHL-PSA-FIES-2012"
 ---
 
 # FIES 2012 Analysis
 
-A collaborative academic analysis of PSA Family Income and Expenditure Survey data, from preparation and normalization to exploratory visualizations.
+A group academic project where we took the PSA’s Family Income and Expenditure Survey data and worked through it step by step, from cleaning and normalizing the data to the visualizations. It’s also where my habit of not trusting data until I’ve studied it really paid off.
 
 **Stack:** Python · Jupyter · Data
 

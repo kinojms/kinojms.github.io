@@ -1,14 +1,14 @@
 ---
 title: "Jörmungandr: Dawn of Ragnarok"
 publishedAt: "2025-06-02"
-summary: "A responsive Magic: The Gathering deck spotlight with a card gallery, mana curve and sample hand."
+summary: "A Magic: The Gathering deck spotlight with a card gallery, mana curve and sample hand."
 images: ["/images/projects/jormungandr.png"]
 link: "https://jormungandr-dawn-of-ragnarok.vercel.app"
 ---
 
 # Jörmungandr: Dawn of Ragnarok
 
-A web-development practice project built around a personal Commander deck, featuring interactive browsing and a light/dark theme.
+A web dev practice project built around **Koma, Cosmos Serpent**, my first ever physical Commander deck and still my favorite. You can browse the cards, check the mana curve, draw a sample hand, and switch between light and dark mode.
 
 **Stack:** HTML · CSS · JavaScript
 
