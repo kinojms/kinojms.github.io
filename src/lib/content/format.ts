@@ -15,7 +15,15 @@ export type SiteContent = {
     languages: string[];
   };
   social: SocialLink[];
+  /** Site background image (public path). Unset means DEFAULT_BACKGROUND. */
+  background?: string;
 };
+
+/** The background used when content/site.json doesn't set one. Keep in sync with scripts/og/background.mjs. */
+export const DEFAULT_BACKGROUND = "/images/armored-landscape.webp";
+/** A safe public image path: no "..", quotes, brackets or spaces (it ends up in a CSS url()). */
+export const BACKGROUND_RE = /^\/images\/[\w\-/]+\.(webp|jpe?g|png)$/;
+export const backgroundOf = (site: SiteContent) => site.background || DEFAULT_BACKGROUND;
 
 export type HomeContent = {
   title: string;
@@ -179,6 +187,7 @@ export function referencedImages(content: PortfolioContent): Set<string> {
     if (s && s.startsWith("/images/")) refs.add(s);
   };
   add(content.site.person.avatar);
+  if (content.site.background) add(content.site.background);
   for (const p of content.projects) p.images.forEach(add);
   // Images used inside Markdown bodies, e.g. ![alt](/images/projects/shot.png)
   const md = [content.about.sections.map((s) => s.body).join("\n"), ...content.projects.map((p) => p.body)];
@@ -229,6 +238,8 @@ export function validate(content: PortfolioContent): ValidationIssue[] {
   need("Profile", site.person.role, "Role");
   if (site.person.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.person.email))
     issues.push({ where: "Profile", message: "Email address doesn't look right." });
+  if (site.background !== undefined && !BACKGROUND_RE.test(site.background))
+    issues.push({ where: "Profile", message: "Background image path isn't valid. Upload the image again." });
   site.social.forEach((s, i) => {
     need("Profile", s.name, `Link ${i + 1} name`);
     if (!isUrl(s.link, { allowMailto: true }))

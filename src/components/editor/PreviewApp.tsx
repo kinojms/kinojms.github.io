@@ -8,13 +8,36 @@ import { AboutView } from "@/components/views/AboutView";
 import { WorkView } from "@/components/views/WorkView";
 import { ProjectView } from "@/components/views/ProjectView";
 import { Footer } from "@/components/Footer";
-import { sortProjects, type PortfolioContent } from "@/lib/content/format";
+import { backgroundOf, sortProjects, type PortfolioContent } from "@/lib/content/format";
 import { viewForPath, type FromPreview, type PreviewView, type ToPreview } from "@/lib/editor/preview";
+
+/** Show the edited background (sharp image + CSS blur, scaled like the build's 1600px pre-blur). */
+function usePreviewBackground(src: string | null) {
+  useEffect(() => {
+    if (!src) return;
+    const root = document.documentElement;
+    const fit = () => {
+      const scale = Math.max(window.innerWidth / 1600, window.innerHeight / 900);
+      root.style.setProperty("--preview-bg-blur", `${(14 * scale).toFixed(2)}px`);
+    };
+    root.style.setProperty("--preview-bg", `url(${JSON.stringify(src)})`);
+    root.classList.add("preview-bg");
+    fit();
+    window.addEventListener("resize", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+      root.classList.remove("preview-bg");
+      root.style.removeProperty("--preview-bg");
+      root.style.removeProperty("--preview-bg-blur");
+    };
+  }, [src]);
+}
 
 /** Renders the editor's unsaved content with the real page components, inside the site layout. */
 export function PreviewApp() {
   const [state, setState] = useState<{ view: PreviewView; content: PortfolioContent } | null>(null);
   const [framed, setFramed] = useState(true);
+  usePreviewBackground(state ? backgroundOf(state.content.site) : null);
 
   useEffect(() => {
     if (window.parent === window) {

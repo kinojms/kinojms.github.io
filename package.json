@@ -2,6 +2,7 @@
   "name": "@once-ui-system/magic-portfolio",
   "version": "2.3.0",
   "scripts": {
+    "predev": "node scripts/og/generate.mjs",
     "dev": "next dev",
     "export": "next export",
     "prebuild": "node scripts/og/generate.mjs",

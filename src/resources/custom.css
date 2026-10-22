@@ -27,7 +27,17 @@ html {
   pointer-events: none;
   /* Pre-blurred image: a static full-viewport backdrop-filter is re-rendered
      every frame of the theme spotlight and can glitch on laptop GPUs. */
-  background: #1e2b3b url('/images/armored-landscape-blur.webp') center center / cover no-repeat;
+  /* --portfolio-bg is set in <head> by layout.tsx from the generated, versioned file. */
+  background: #1e2b3b var(--portfolio-bg, none) center center / cover no-repeat;
+}
+
+/* Editor preview only: the browser can't pre-blur an unsaved upload, so the preview blurs the
+   sharp image in CSS, scaled to match the 1600px pre-blur (set by PreviewApp). Never applies
+   on the live site, so the theme-toggle transition stays filter-free. */
+html.is-preview.preview-bg .portfolio-body::before {
+  background-image: var(--preview-bg);
+  filter: blur(var(--preview-bg-blur, 14px)) saturate(1.25);
+  inset: calc(var(--preview-bg-blur, 14px) * -3);
 }
 
 /* Full-page frosted glass tint, no card or border. */

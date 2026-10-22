@@ -16,6 +16,7 @@ import {
 } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers } from "@/components";
 import { baseURL, effects, fonts, style, dataStyle, home, person } from "@/resources";
+import generated from "@/resources/og.json";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -111,6 +112,8 @@ export default async function RootLayout({
             `,
           }}
         />
+        {/* Site background (pre-blurred at build time by scripts/og/generate.mjs). */}
+        <style dangerouslySetInnerHTML={{ __html: `:root{--portfolio-bg:url(${JSON.stringify(generated.background)})}` }} />
       </head>
       <Providers>
         <Column
