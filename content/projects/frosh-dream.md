@@ -2,7 +2,7 @@
 title: "FroshDream"
 publishedAt: "2025-11-05"
 summary: "A top-down roguelite about surviving a semester full of monstrous assignments and “graded” combat."
-images: ["/images/projects/frosh-dream.png"]
+images: ["/images/projects/frosh-dream.webp"]
 link: "https://github.com/kinojms/frosh-dream"
 ---
 

@@ -2,7 +2,7 @@
 title: "Gastos.io"
 publishedAt: "2026-10-16"
 summary: "A quick expense tracker for Android and iPhone, with payment shortcuts, voice input, exports and offline use."
-images: ["/images/projects/gastos-io.png"]
+images: ["/images/projects/gastos-io.webp"]
 link: "https://kinojms.github.io/gastos.io/"
 ---
 

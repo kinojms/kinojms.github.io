@@ -2,7 +2,7 @@
 title: "Jörmungandr: Dawn of Ragnarok"
 publishedAt: "2025-06-02"
 summary: "A Magic: The Gathering deck spotlight with a card gallery, mana curve and sample hand."
-images: ["/images/projects/jormungandr.png"]
+images: ["/images/projects/jormungandr.webp"]
 link: "https://jormungandr-dawn-of-ragnarok.vercel.app"
 ---
 
