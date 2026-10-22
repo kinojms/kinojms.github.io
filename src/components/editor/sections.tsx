@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import s from "./Editor.module.css";
 import { Checkbox, ImagePicker, ListInput, Select, TextArea, TextInput } from "./fields";
 import { iconLibrary } from "@/resources/icons";
-import { slugify, type PortfolioContent, type Project, type ValidationIssue } from "@/lib/content/format";
+import { backgroundOf, slugify, type PortfolioContent, type Project, type ValidationIssue } from "@/lib/content/format";
 import { UPLOAD_DIR, type PendingImages } from "@/lib/editor/changes";
 import type { ProcessedImage } from "@/lib/editor/images";
 
@@ -93,6 +93,32 @@ export function ProfileForm({ content, update, pending, addImage }: Common) {
             const path = uploadPath("avatar", img.ext);
             addImage(path, img);
             update((d) => void (d.site.person.avatar = path));
+          }}
+        />
+      </Section>
+
+      <Section
+        title="Background"
+        help="The image behind every page. It's blurred and tinted so text stays readable, and the preview shows exactly how it'll look in light and dark mode."
+      >
+        <ImagePicker
+          label="Background image"
+          kind="cover"
+          src={imgSrc(pending, backgroundOf(content.site))}
+          hint="A wide landscape picture works best: it fills the screen, so the edges of other shapes get cropped. Changing it also updates the image shown when your link is shared."
+          removeLabel="Use default"
+          onRemove={
+            content.site.background
+              ? () =>
+                  update((d) => {
+                    delete d.site.background;
+                  })
+              : undefined
+          }
+          onPick={(img) => {
+            const path = uploadPath("background", img.ext);
+            addImage(path, img);
+            update((d) => void (d.site.background = path));
           }}
         />
       </Section>

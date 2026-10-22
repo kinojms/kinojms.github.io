@@ -32,7 +32,11 @@ export function withPendingImages(content: PortfolioContent, pending: PendingIma
   const swapText = (text: string) => paths.reduce((t, p) => t.split(`](${p}`).join(`](${pending[p].dataUrl}`), text);
   return {
     ...content,
-    site: { ...content.site, person: { ...content.site.person, avatar: swap(content.site.person.avatar) } },
+    site: {
+      ...content.site,
+      person: { ...content.site.person, avatar: swap(content.site.person.avatar) },
+      ...(content.site.background ? { background: swap(content.site.background) } : {}),
+    },
     about: { ...content.about, sections: content.about.sections.map((s) => ({ ...s, body: swapText(s.body) })) },
     projects: content.projects.map((p) => ({ ...p, images: p.images.map(swap), body: swapText(p.body) })),
   };

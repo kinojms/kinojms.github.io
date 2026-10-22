@@ -285,3 +285,48 @@ describe("review fixes", () => {
   });
 });
 
+
+describe("background image", () => {
+  const uploaded = (name: string) => `/images/uploads/${name}.webp`;
+
+  it("uploads a new background with the draft and lists it in the summary", async () => {
+    const { set } = await edit(await gh.load(), (c) => (c.site.background = uploaded("bg-a")), { [uploaded("bg-a")]: tiny });
+    expect(set.writes.map((w) => w.path).sort()).toEqual(["content/site.json", `public${uploaded("bg-a")}`]);
+    expect(set.deletes).toEqual([]);
+    const site = JSON.parse(set.writes.find((w) => w.path === "content/site.json")!.text!);
+    expect(site.background).toBe(uploaded("bg-a"));
+  });
+
+  it("deletes a replaced or reset upload, never the default, and keeps one still used as the avatar", async () => {
+    const site = JSON.parse(contentDir()["content/site.json"]);
+    site.background = uploaded("bg-a");
+    fake.state.commitDirect("main", { "content/site.json": serializeJson(site), [`public${uploaded("bg-a")}`]: "img" });
+    const snap = await gh.load();
+
+    const replaced = await edit(snap, (c) => (c.site.background = uploaded("bg-b")), { [uploaded("bg-b")]: tiny });
+    expect(replaced.set.deletes).toEqual([`public${uploaded("bg-a")}`]);
+
+    const reset = await edit(snap, (c) => void delete c.site.background);
+    expect(reset.set.deletes).toEqual([`public${uploaded("bg-a")}`]);
+    expect(JSON.parse(reset.set.writes[0].text!)).not.toHaveProperty("background");
+
+    const shared = await edit(snap, (c) => {
+      c.site.person.avatar = uploaded("bg-a");
+      delete c.site.background;
+    });
+    expect(shared.set.deletes).not.toContain(`public${uploaded("bg-a")}`);
+  });
+
+  it("keeps an unsaved background edit when the draft is rebased onto newer content", async () => {
+    const base = await gh.load();
+    const content = clone(snapshotContent(base));
+    content.site.background = uploaded("bg-a");
+    const home = JSON.parse(contentDir()["content/home.json"]);
+    home.headline = "Changed on GitHub";
+    fake.state.commitDirect("main", { "content/home.json": serializeJson(home) });
+    const fresh = await gh.load();
+    const rebased = rebaseEdits(base, content, { [uploaded("bg-a")]: tiny }, fresh)!;
+    expect(rebased.site.background).toBe(uploaded("bg-a"));
+    expect(rebased.home.headline).toBe("Changed on GitHub");
+  });
+});

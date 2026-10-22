@@ -124,6 +124,8 @@ export function ImagePicker(props: {
   kind: "cover" | "avatar";
   onPick: (img: ProcessedImage, fileName: string) => void;
   onRemove?: () => void;
+  /** Text of the remove button (default "Remove"). */
+  removeLabel?: string;
   hint?: ReactNode;
 }) {
   const input = useRef<HTMLInputElement>(null);
@@ -156,7 +158,7 @@ export function ImagePicker(props: {
             </button>
             {props.src && props.onRemove && (
               <button type="button" className={`${s.btn} ${s.btnGhost}`} style={{ flex: "none" }} onClick={props.onRemove}>
-                Remove
+                {props.removeLabel ?? "Remove"}
               </button>
             )}
           </div>

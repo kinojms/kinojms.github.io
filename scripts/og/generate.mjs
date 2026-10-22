@@ -1,13 +1,14 @@
-// Generates the link-preview image (Open Graph / Twitter card) from the current content,
-// so the picture shown when the site is shared on social media never goes stale.
-// Runs before every build (`prebuild`). Output:
-//   public/images/og/home.jpg         1200 x 630 preview image
-//   src/resources/og.json             { "home": "/images/og/home.jpg?v=<hash>" }  (the ?v= busts social caches)
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+// Generates images derived from the current content, so they never go stale.
+// Runs before every build and dev server (`prebuild`, `predev`). Output:
+//   public/images/og/home.jpg                     1200 x 630 link-preview image (Open Graph / Twitter card)
+//   public/images/generated/background-blur.webp  pre-blurred site background (gitignored)
+//   src/resources/og.json                         { home, background } URLs with ?v=<hash> (busts caches)
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { createElement as h } from "react";
 import sharp from "sharp";
 import { ImageResponse } from "next/dist/compiled/@vercel/og/index.node.js";
+import { resolveBackground } from "./background.mjs";
 
 const root = new URL("../../", import.meta.url);
 const file = (p) => new URL(p, root);
@@ -17,13 +18,27 @@ const font = (name) => readFileSync(new URL(`./fonts/${name}`, import.meta.url))
 const site = json("content/site.json");
 const home = json("content/home.json");
 const W = 1200, H = 630;
+const hash = (buf) => createHash("sha1").update(buf).digest("hex").slice(0, 8);
+
+// ---- site background: pre-blurred once here (a live CSS blur over the whole page glitches
+// during the theme-toggle transition on some laptop GPUs).
+const background = resolveBackground(site.background, (p) => existsSync(file(`public${p}`)), /^(1|true)$/i.test(process.env.CI ?? ""));
+if (background.warning) console.warn(`og: warning: ${background.warning}`);
+const blur = await sharp(readFileSync(file(`public${background.path}`)))
+  .resize(1600, 900, { fit: "cover" })
+  .blur(14)
+  .modulate({ saturation: 1.25 })
+  .webp({ quality: 80 })
+  .toBuffer();
+mkdirSync(file("public/images/generated"), { recursive: true });
+writeFileSync(file("public/images/generated/background-blur.webp"), blur);
 
 async function dataUrl(path, resize) {
   const buf = await sharp(readFileSync(file(`public${path}`))).resize(resize).png().toBuffer();
   return `data:image/png;base64,${buf.toString("base64")}`;
 }
 
-const bg = await dataUrl("/images/armored-landscape.webp", { width: W, height: H, fit: "cover" });
+const bg = await dataUrl(background.path, { width: W, height: H, fit: "cover" });
 // A missing or external avatar just leaves the photo out instead of failing the build.
 const avatar = await dataUrl(site.person.avatar, { width: 220, height: 220, fit: "cover" }).catch(() => null);
 const host = "kinojms.github.io";
@@ -84,10 +99,11 @@ const res = new ImageResponse(tree, {
 const png = await sharp(Buffer.from(await res.arrayBuffer())).jpeg({ quality: 86, mozjpeg: true }).toBuffer();
 mkdirSync(file("public/images/og"), { recursive: true });
 writeFileSync(file("public/images/og/home.jpg"), png);
-const v = createHash("sha1").update(png).digest("hex").slice(0, 8);
-const manifest = JSON.stringify({ home: `/images/og/home.jpg?v=${v}` }, null, 2) + "\n";
+const v = hash(png);
+const manifest =
+  JSON.stringify({ home: `/images/og/home.jpg?v=${v}`, background: `/images/generated/background-blur.webp?v=${hash(blur)}` }, null, 2) + "\n";
 const out = file("src/resources/og.json");
 let old = "";
 try { old = readFileSync(out, "utf8"); } catch {}
 if (old !== manifest) writeFileSync(out, manifest);
-console.log(`og: public/images/og/home.jpg (${(png.length / 1024).toFixed(0)} KB, v=${v})`);
+console.log(`og: public/images/og/home.jpg (${(png.length / 1024).toFixed(0)} KB, v=${v}); background ${background.path} -> generated/background-blur.webp (${(blur.length / 1024).toFixed(0)} KB)`);
