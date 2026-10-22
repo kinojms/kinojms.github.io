@@ -2,7 +2,7 @@
 title: "Pocket Gains"
 publishedAt: "2026-09-29"
 summary: "A deckbuilder for home workouts with an evolving blob buddy, installable as an app, with optional Supabase sync."
-images: ["/images/projects/pocket-gains.png"]
+images: ["/images/projects/pocket-gains.webp"]
 link: "https://kinojms.github.io/pocket-gains/"
 ---
 

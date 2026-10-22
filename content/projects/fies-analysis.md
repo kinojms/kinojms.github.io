@@ -2,7 +2,7 @@
 title: "Machine Learning: FIES 2012"
 publishedAt: "2025-08-04"
 summary: "Cleaning, visualizing and running machine learning on a Philippine household income and expenditure survey."
-images: ["/images/projects/fies-analysis.png"]
+images: ["/images/projects/fies-analysis.webp"]
 link: "https://github.com/kinojms/PHL-PSA-FIES-2012"
 ---
 

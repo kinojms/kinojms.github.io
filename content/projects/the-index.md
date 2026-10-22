@@ -2,7 +2,7 @@
 title: "Prescript Terminal"
 publishedAt: "2026-04-07"
 summary: "A fun little productivity app with daily directives, tasks, CRT effects and offline support. Hope you get the reference."
-images: ["/images/projects/the-index.png"]
+images: ["/images/projects/the-index.webp"]
 link: "https://kinojms.github.io/tsukino-prescript/"
 ---
 
