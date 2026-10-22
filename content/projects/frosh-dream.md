@@ -1,14 +1,14 @@
 ---
 title: "FroshDream"
 publishedAt: "2025-11-05"
-summary: "An academic-themed top-down roguelite about surviving a term of monstrous assignments and graded combat."
+summary: "A top-down roguelite about surviving a DLSU term full of monstrous assignments and “graded” combat."
 images: ["/images/projects/frosh-dream.png"]
 link: "https://github.com/kinojms/frosh-dream"
 ---
 
 # FroshDream
 
-A DLSU freshman fights through a fever-dream semester. Weapons level through grades, waves culminate in bosses, and campus stress becomes the game world.
+A DLSU freshman fights their way through a fever-dream semester. Your weapons level up through your grades, every wave ends in a boss, and all that campus stress becomes the actual game world. Honestly, it’s probably the most relatable thing I’ve made.
 
 **Stack:** Godot · GDScript · Game
 
