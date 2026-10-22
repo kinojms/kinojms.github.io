@@ -11,7 +11,7 @@
   "sections": [
     {
       "label": "MORE ABOUT ME",
-      "heading": "My AGENT.md",
+      "heading": "My README.md",
       "body": "If I had to write a quick guide to working with me, it would start with this: I don't take things at face value. Whether it's a dataset, a bug, or one of the many app ideas living rent-free in my head, I like to study it first, which is why most of my time goes into planning and setting things up. Give me a clear goal and a deadline, and it'll get done. Just know that I'll probably keep nitpicking the details until it actually feels right (perfectionism is both my strength and my biggest time sink).\n\nOutside of coding, I'm into a lot of things, honestly. I build mechanical keyboards and Magic: The Gathering decks, practice my coffee-making (someday I'd love to run my own café), and window-shop PCs and laptops I definitely can't afford yet. I also play more gacha games than I'd like to admit, grind through Warframe and Monster Hunter, and binge manga and manhwa before chasing down the novels they came from.\n\nMost of these interests sneak into my work one way or another. A few of my projects hide small references to the games and stories I love, so if you catch one, it'll probably make my day. If not, that's totally fine too (my tastes are kinda niche).",
       "tags": []
     },
@@ -29,7 +29,7 @@
     },
     {
       "label": "HOW I WORK",
-      "heading": "Ask better questions.",
+      "heading": "Asking the right questions.",
       "tags": [
         "Web & software",
         "UI / UX",
@@ -42,7 +42,7 @@
   ],
   "contact": {
     "label": "WHAT’S NEXT",
-    "heading": "Let’s make something happen.",
-    "body": "I’m always open to interesting projects, creative collaborations, or just learning something new from a different perspective. Have something in mind? Let’s talk."
+    "heading": "Let’s make something happen!",
+    "body": "I’m always open to interesting projects, creative collaborations, or just learning something new from a different perspective. Have something in mind? Let's talk."
   }
 }

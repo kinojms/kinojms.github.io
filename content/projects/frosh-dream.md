@@ -1,7 +1,7 @@
 ---
 title: "FroshDream"
 publishedAt: "2025-11-05"
-summary: "A top-down roguelite about surviving a DLSU term full of monstrous assignments and “graded” combat."
+summary: "A top-down roguelite about surviving a semester full of monstrous assignments and “graded” combat."
 images: ["/images/projects/frosh-dream.png"]
 link: "https://github.com/kinojms/frosh-dream"
 ---
