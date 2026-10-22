@@ -3,7 +3,7 @@ title: "The Architecture of a Lie"
 publishedAt: "2025-11-25"
 summary: "An interactive look at how misinformation spreads through online networks, and how it slowly changes what people believe."
 images: ["/images/projects/architecture-of-a-lie.png"]
-link: "https://github.com/kinojms/the-architecture-of-a-lie"
+link: "https://kinojms.github.io/the-architecture-of-a-lie/"
 ---
 
 # The Architecture of a Lie
