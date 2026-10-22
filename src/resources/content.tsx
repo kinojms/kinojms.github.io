@@ -5,6 +5,8 @@ import siteJson from "../../content/site.json";
 import homeJson from "../../content/home.json";
 import aboutJson from "../../content/about.json";
 import workJson from "../../content/work.json";
+// Link-preview image, regenerated from the content on every build by scripts/og/generate.mjs.
+import og from "./og.json";
 
 const person: Person = {
   ...siteJson.person,
@@ -18,7 +20,7 @@ const newsletter: Newsletter = { display: false, title: "Updates", description: 
 
 const home: Home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: og.home,
   label: "Home",
   title: homeJson.title,
   description: homeJson.description,
