@@ -169,3 +169,41 @@ html.is-preview .portfolio-body > footer:not(.preview-footer) {
 html:has([data-editor-shell]) {
   overflow: hidden;
 }
+
+/* In the opt-in Home build, shell controls are always real and clickable. */
+html[data-home-build="shell"] .portfolio-body::after {
+  animation: background-guide 750ms ease-out both;
+}
+@keyframes background-guide {
+  from, to { box-shadow: inset 0 0 0 2px transparent; }
+  30%, 75% { box-shadow: inset 0 0 0 2px var(--brand-on-background-strong); }
+}
+html[data-home-build="shell"] .portfolio-body > header,
+html[data-home-build="shell"] .portfolio-body > footer {
+  outline: 1px solid var(--brand-on-background-strong);
+  outline-offset: -3px;
+  animation: shell-guide 750ms ease-out both;
+}
+html[data-home-build="shell"] .portfolio-body > footer { position: relative; }
+html[data-home-build="shell"] .portfolio-body > header::after,
+html[data-home-build="shell"] .portfolio-body > footer::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  top: 0;
+  width: 20px;
+  height: 24px;
+  background: var(--brand-on-background-strong);
+  clip-path: polygon(0 0, 0 100%, 32% 73%, 55% 100%, 72% 91%, 50% 64%, 100% 61%);
+  pointer-events: none;
+  animation: shell-cursor 750ms ease-out both;
+}
+@keyframes shell-guide { from { outline-color: transparent; } 30%, 75% { outline-color: var(--brand-on-background-strong); } to { outline-color: transparent; } }
+@keyframes shell-cursor { from { transform: translate(-24px, -18px); opacity: 0; } 40% { opacity: 1; } to { transform: translate(100px, 12px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  html[data-home-build="shell"] .portfolio-body::after { animation: none; }
+  html[data-home-build="shell"] .portfolio-body > header,
+  html[data-home-build="shell"] .portfolio-body > footer { animation: none; outline: none; }
+  html[data-home-build="shell"] .portfolio-body > header::after,
+  html[data-home-build="shell"] .portfolio-body > footer::after { display: none; }
+}
