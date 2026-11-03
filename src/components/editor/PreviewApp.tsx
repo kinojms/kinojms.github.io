@@ -103,7 +103,7 @@ export function PreviewApp() {
   let page: React.ReactNode;
   switch (view.kind) {
     case "home":
-      page = <HomeView home={content.home} role={content.site.person.role} aboutTitle={content.about.title} avatar={content.site.person.avatar} projects={projects} animationEnabled={false} />;
+      page = <HomeView home={content.home} role={content.site.person.role} aboutTitle={content.about.title} avatar={content.site.person.avatar} projects={projects} />;
       break;
     case "about":
       page = <AboutView site={content.site} about={content.about} />;
