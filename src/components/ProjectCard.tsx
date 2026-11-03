@@ -15,7 +15,7 @@ interface ProjectCardProps {
   priority?: boolean;
   images: string[];
   title: string;
-  /** Whether the project has a case study page to link to. */
+  /** Whether the project has a short project page to link to. */
   hasContent: boolean;
   description: string;
   avatars: { src: string; "aria-label"?: string }[];
@@ -70,7 +70,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   style={{ margin: "0", width: "fit-content" }}
                   href={href}
                 >
-                  <Text variant="body-default-s">Read case study</Text>
+                  <Text variant="body-default-s">About this project</Text>
                 </SmartLink>
               )}
               {link && (

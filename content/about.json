@@ -10,16 +10,10 @@
   },
   "sections": [
     {
-      "label": "MORE ABOUT ME",
-      "heading": "My README.md",
-      "body": "If I had to write a quick guide to working with me, it would start with this: I don't take things at face value. Whether it's a dataset, a bug, or one of the many app ideas living rent-free in my head, I like to study it first, which is why most of my time goes into planning and setting things up. Give me a clear goal and a deadline, and it'll get done. Just know that I'll probably keep nitpicking the details until it actually feels right (perfectionism is both my strength and my biggest time sink).\n\nOutside of coding, I'm into a lot of things, honestly. I build mechanical keyboards and Magic: The Gathering decks, practice my coffee-making (someday I'd love to run my own café), and window-shop PCs and laptops I definitely can't afford yet. I also play more gacha games than I'd like to admit, grind through Warframe and Monster Hunter, and binge manga and manhwa before chasing down the novels they came from.\n\nMost of these interests sneak into my work one way or another. A few of my projects hide small references to the games and stories I love, so if you catch one, it'll probably make my day. If not, that's totally fine too (my tastes are kinda niche).",
-      "tags": []
-    },
-    {
       "label": "ABOUT MY PROJECTS",
       "heading": "Well of Ideas.",
       "tags": [],
-      "body": "I’ve been drawn to the space between technology and digital creativity for as long as I can remember. Whether it’s a web app, an interface, a video, or some random idea that just popped into my head, I like taking that first rough concept and turning it into something people can actually use (or at least have fun with).\n\nMost of my work lives on the web, where I build with React, Next.js and TypeScript, though I’ve also picked up JavaScript, Python and Kotlin along the way. I care just as much about how an interface feels as how it works behind the scenes, which is usually where the nitpicking starts.\n\nSome of my favorites so far are [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a workout tracker that turns your progress into a game. Both started as one of those many app ideas, and both taught me something new before they were done."
+      "body": "I’ve been drawn to the space between technology and digital creativity for as long as I can remember. Whether it’s a web app, an interface, a video, or some random idea that just popped into my head, I like taking that first rough concept and turning it into something people can actually use (or at least have fun with).\n\nMost of my work lives on the web, where I build with React, Next.js and TypeScript, though I’ve also picked up JavaScript, Python and Kotlin along the way. I care just as much about how an interface feels as how it works behind the scenes, which is usually where the nitpicking starts.\n\nSome of my favorites so far are [Gastos.io](/work/gastos-io), a personal expense tracker, and [Pocket Gains](/work/pocket-gains), a workout tracker that turns your progress into a game. Both started as one of those many app ideas. Gastos.io now helps me keep track of my own expenses; Pocket Gains is still in progress (there are more cards and a blob buddy to finish)."
     },
     {
       "label": "MORE THAN CODE",
@@ -37,7 +31,13 @@
         "Creative media",
         "Data & research"
       ],
-      "body": "If there’s one thing that describes how I work, it’s that I like figuring things out. I don’t really trust the first answer I get, so I’d rather understand *why* something works, question the assumptions behind it, and try another approach if the result could be better.\n\nI don’t think being good at something means knowing every answer. For me, it means knowing how to ask the right questions, finding reliable information, and making the most of whatever tools and “resources” I have on hand. Honestly, that’s pretty much how I’ve learned most of what I know."
+      "body": "If there’s one thing that describes how I work, it’s that I like figuring things out. I don’t really trust the first answer I get, so I’d rather understand *why* something works, question the assumptions behind it, and try another approach if the result could be better. Give me a clear goal and a deadline, and it'll get done (though I'll probably nitpick the details along the way).\n\nI don’t think being good at something means knowing every answer. For me, it means knowing how to ask the right questions, finding reliable information, and making the most of whatever tools and “resources” I have on hand. Honestly, that’s pretty much how I’ve learned most of what I know."
+    },
+    {
+      "label": "MORE ABOUT ME",
+      "heading": "My README.md",
+      "body": "Outside of coding, I'm into a lot of things, honestly. I build mechanical keyboards and Magic: The Gathering decks, practice my coffee-making (someday I'd love to run my own café), and window-shop PCs and laptops I definitely can't afford yet. I also play more gacha games than I'd like to admit, grind through Warframe and Monster Hunter, and binge manga and manhwa before chasing down the novels they came from.\n\nMost of these interests sneak into my work one way or another. A few of my projects hide small references to the games and stories I love, so if you catch one, it'll probably make my day. If not, that's totally fine too (my tastes are kinda niche).",
+      "tags": []
     }
   ],
   "contact": {
