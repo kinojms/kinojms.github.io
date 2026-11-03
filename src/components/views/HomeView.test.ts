@@ -26,14 +26,25 @@ const projects: Project[] = Array.from({ length: 7 }, (_, i) => ({
   body: "A short note.",
 }));
 
-const renderHome = () => renderToStaticMarkup(createElement(LayoutProvider, {
+const renderHome = (animationEnabled = true) => renderToStaticMarkup(createElement(LayoutProvider, {
   children: createElement(IconProvider, {
     icons: iconLibrary,
-    children: createElement(HomeView, { home, role: "Software developer", aboutTitle: "About", avatar: "", projects }),
+    children: createElement(HomeView, { home, role: "Software developer", aboutTitle: "About", avatar: "", projects, animationEnabled }),
   }),
 }));
 
 describe("HomeView", () => {
+  it("offers an opt-in build mode without withholding the normal content", () => {
+    const html = renderHome();
+    expect(html).toContain("Watch it build");
+    expect(html).toContain("The lights in the sky are stars");
+    expect(html).toContain("Project 1");
+  });
+
+  it("does not offer build mode in the editor preview", () => {
+    expect(renderHome(false)).not.toContain("Watch it build");
+  });
+
   it("introduces the developer and shows only the three newest projects", () => {
     const html = renderHome();
     expect(html).toContain("Software developer");

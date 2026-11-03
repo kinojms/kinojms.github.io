@@ -1,0 +1,114 @@
+.normal, .theatrical {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.normal > *, .theatrical > * { width: 100%; }
+
+.watch {
+  margin-top: 1.5rem;
+  padding: 0.45rem 0.7rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--neutral-on-background-weak);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.watch:hover, .watch:focus-visible { color: var(--neutral-on-background-strong); background: var(--neutral-alpha-weak); }
+.watch:focus-visible, .exit:focus-visible { outline: 2px solid var(--brand-on-background-strong); outline-offset: 3px; }
+.watch span { color: var(--brand-on-background-strong); margin-right: 0.3rem; }
+
+.flourish {
+  position: absolute;
+  right: 2%;
+  top: -12px;
+  color: var(--brand-on-background-strong);
+  pointer-events: none;
+  opacity: 0;
+  animation: flourish 1.4s ease-out 0.9s both;
+}
+@keyframes flourish {
+  0%, 100% { opacity: 0; transform: translate(-30px, -16px) rotate(-12deg); }
+  30%, 70% { opacity: 0.9; transform: translate(0, 0) rotate(0); }
+}
+
+.stage { position: relative; width: 100%; }
+.theatrical .stage > :not(.stageCursor) { transition: opacity 280ms ease-out; }
+.theatrical .stage:not([data-build-state="shown"]) > :not(.stageCursor) {
+  opacity: 0;
+  pointer-events: none;
+}
+.theatrical .stage:focus-within > :not(.stageCursor) { opacity: 1; }
+.theatrical .stage[data-build-state="building"]::before {
+  content: "";
+  position: absolute;
+  inset: 0 4px;
+  border: 1px solid var(--brand-on-background-strong);
+  border-radius: 8px;
+  opacity: 0.7;
+  clip-path: inset(0 100% 0 0);
+  animation: draw-outline 560ms ease-out forwards;
+  pointer-events: none;
+}
+@keyframes draw-outline { to { clip-path: inset(0 0 0 0); } }
+.stageCursor {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 8px;
+  z-index: 2;
+  color: var(--brand-on-background-strong);
+  pointer-events: none;
+}
+.theatrical .stage[data-build-state="building"] .stageCursor {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2px;
+  animation: place-cursor 560ms ease-out forwards;
+}
+.cursorLabel {
+  max-width: min(52vw, 240px);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--brand-on-background-strong);
+  color: var(--page-background);
+  font-size: 0.7rem;
+  line-height: 1.3;
+  animation: type-label 500ms steps(20, end) forwards;
+}
+@keyframes type-label { from { max-width: 0; padding-inline: 0; } }
+@keyframes place-cursor {
+  from { transform: translate(-12px, -14px); opacity: 0; }
+  35% { opacity: 1; }
+  to { transform: translate(110px, 10px); opacity: 0.8; }
+}
+
+.exit {
+  position: fixed;
+  z-index: 30;
+  top: calc(18px + env(safe-area-inset-top, 0px));
+  right: 18px;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--neutral-alpha-medium);
+  border-radius: 0.6rem;
+  background: var(--page-background);
+  color: var(--neutral-on-background-strong);
+  box-shadow: 0 4px 18px rgba(0,0,0,.18);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.exit:hover { background: var(--neutral-alpha-weak); }
+@media (max-width: 768px) {
+  .exit { top: 12px; right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flourish, .stageCursor { display: none !important; animation: none !important; }
+  .theatrical .stage > :not(.stageCursor) { opacity: 1 !important; transition: none !important; pointer-events: auto !important; }
+  .theatrical .stage::before { display: none !important; }
+}
