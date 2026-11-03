@@ -8,7 +8,7 @@ link: "https://kinojms.github.io/gastos.io/"
 
 # Gastos.io
 
-I made this for the exact moment you pay for something and tell yourself you’ll log it later (you won’t). You type in the amount fast, swipe to switch payment methods, then export or back up your records whenever you need them. It works offline too, so there’s no excuse.
+I made this for the exact moment you pay for something and tell yourself you’ll log it later (you won’t). You type in the amount fast, swipe to switch payment methods, then export or back up your records whenever you need them. It works offline too, so there’s no excuse. I use it to keep track of my own expenses, and making it easy to log them was the part I cared about most.
 
 **Stack:** Kotlin · Android · PWA
 

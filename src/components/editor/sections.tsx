@@ -372,7 +372,7 @@ export function ProjectsForm(
           onRemove={() => set((p) => void (p.images = p.images.slice(1)))}
         />
         {project.images[0] && <TextInput label="Cover description (alt text)" value={project.coverAlt} onChange={(v) => set((p) => void (p.coverAlt = v))} hint="Describes the image for screen readers. Defaults to the title." />}
-        <TextArea label="Write-up" large value={project.body} onChange={(v) => set((p) => void (p.body = v))} hint={<>Leave empty to hide the “Read case study” link. {MD_HELP}</>} />
+        <TextArea label="Write-up" large value={project.body} onChange={(v) => set((p) => void (p.body = v))} hint={<>Leave empty to hide the “About this project” link. {MD_HELP}</>} />
       </Section>
       <Section title="Danger zone">
         <button

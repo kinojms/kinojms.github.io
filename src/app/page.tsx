@@ -32,6 +32,7 @@ export default function Home() {
       />
       <HomeView
         home={content.home}
+        role={content.site.person.role}
         aboutTitle={content.about.title}
         avatar={content.site.person.avatar}
         projects={content.projects}

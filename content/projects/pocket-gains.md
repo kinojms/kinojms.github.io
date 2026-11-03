@@ -1,14 +1,14 @@
 ---
 title: "Pocket Gains"
 publishedAt: "2026-09-29"
-summary: "A deckbuilder for home workouts with an evolving blob buddy, installable as an app, with optional Supabase sync."
+summary: "In progress: a deck-building fitness app with a working workout loop. Final pet art and more animations are still on my list."
 images: ["/images/projects/pocket-gains.webp"]
 link: "https://kinojms.github.io/pocket-gains/"
 ---
 
 # Pocket Gains
 
-A workout planner that plays like a game. You build a deck of exercises, keep moving, and watch a little blob companion grow with you. It’s basically my attempt at tricking myself into working out (it kinda works).
+A fitness app with a deck-building side, because a plain workout list wasn't going to keep me interested. The workout loop and deck-builder work, and there's already a blob buddy. I still want to finish its art and animations, add more cards, and make proper workout tutorial videos. It's very much in progress (the blob isn't done yet).
 
 **Stack:** TypeScript · PWA · Supabase
 

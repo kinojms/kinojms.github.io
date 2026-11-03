@@ -4,6 +4,7 @@ import type { HomeContent, Project } from "@/lib/content/format";
 
 interface HomeViewProps {
   home: HomeContent;
+  role: string;
   /** Text of the button linking to the About page (the About page title). */
   aboutTitle: string;
   avatar: string;
@@ -11,7 +12,7 @@ interface HomeViewProps {
   projects: Project[];
 }
 
-export function HomeView({ home, aboutTitle, avatar, projects }: HomeViewProps) {
+export function HomeView({ home, role, aboutTitle, avatar, projects }: HomeViewProps) {
   return (
     <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
       <Column fillWidth horizontal="center" gap="m">
@@ -31,6 +32,9 @@ export function HomeView({ home, aboutTitle, avatar, projects }: HomeViewProps) 
               </Badge>
             </RevealFx>
           )}
+          <Text variant="label-default-s" onBackground="neutral-weak">
+            {role}
+          </Text>
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
               {home.headline}
@@ -57,7 +61,7 @@ export function HomeView({ home, aboutTitle, avatar, projects }: HomeViewProps) 
         <ProjectList projects={projects} range={[1, 1]} />
       </RevealFx>
       {/* Cards below the first fade in as they scroll into view (never before the first one starts). */}
-      <ProjectList projects={projects} range={[2, 7]} revealAfter={1000} />
+      <ProjectList projects={projects} range={[2, 3]} revealAfter={1000} />
       <Button href="/work" variant="secondary" size="m" arrowIcon>
         Explore all projects
       </Button>
